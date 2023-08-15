@@ -7,27 +7,27 @@ import { ConnectKitButton } from "connectkit"
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-blue-500 p-4 flex items-center justify-between">
+    <header className="bg-cat-crust p-4 flex items-center justify-between ">
       <div className="navbar bg-base-500">
         <div className="navbar-start">
           <img
-              src="/tobi.png" // 替換成你的圖標的路徑
-              alt="Icon"
-              className="w-16 h-16"
-            />
+            src="/tobi.png" // 替換成你的圖標的路徑
+            alt="Icon"
+            className="w-14 h-14"
+          />
           <ul className="menu menu-horizontal px-1 text-xl lg:flex">
-          <li><Link href={"/dashboard"}>Dashboard</Link></li>
-          <li><Link href={"/bind"}>Bind</Link></li>
-          <li><Link href={"/vote"}>Vote</Link></li>
+            <li><Link href={"/dashboard"}>Dashboard</Link></li>
+            <li><Link href={"/bind"}>Bind</Link></li>
+            <li><Link href={"/vote"}>Vote</Link></li>
           </ul>
         </div>
         <div className="navbar-end mr-5">
-        <div>
-          <ConnectKitButton />
+          <div>
+            <ConnectKitButton />
+          </div>
         </div>
       </div>
-      </div>
-    </header>
+    </header >
   );
 };
 

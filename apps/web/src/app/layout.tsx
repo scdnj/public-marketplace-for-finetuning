@@ -1,10 +1,16 @@
 import "../styles/globals.css";
 // include styles from the ui package
+import { Metadata } from 'next'
 import "ui/styles.css";
 import Header from '../components/NavBar/Header'
-import { ConnectKitProvider } from 'connectkit'
-import { WagmiConfig, useAccount } from 'wagmi'
-import { config } from "process";
+import { WagmiProvider } from '../components/Provider/wagmiProvider'
+import ClientOnly from '../components/ClientOnly'
+
+
+export const metadata: Metadata = {
+  title: 'Tobi',
+  description: 'Welcome to HollowLeaf',
+}
 
 export default function RootLayout({
   children,
@@ -13,13 +19,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="bg-zinc-900">
-      <body>
-      <WagmiConfig config={config}>
-        <ConnectKitProvider>
-        <Header />
-        {children}
-        </ConnectKitProvider>
-        </WagmiConfig>
+      <body className="overflow-hidden">
+        <WagmiProvider>
+          <ClientOnly>
+            <Header />
+          </ClientOnly>
+          <div className="grow bg-cat-base overflow-y-auto" >{children}</div>
+        </WagmiProvider>
       </body>
     </html>
   );

@@ -16,23 +16,39 @@ const defaultChains: Chain[] = [
 const { chains, publicClient, webSocketPublicClient } = configureChains(
     defaultChains,
     [publicProvider()],
-  )
+)
+// const config = createConfig({
+//     autoConnect: true,
+//     connectors: [
+//         new MetaMaskConnector({ chains }),
+//     ],
+//     publicClient,
+//     webSocketPublicClient,
+// });
 
- const config = createConfig({
-    autoConnect: true,
-    connectors:[
-        new MetaMaskConnector({ chains }),
-    ],
-    publicClient,
-    webSocketPublicClient,
-});
+const config = createConfig(
+    getDefaultConfig({
+        autoConnect: true,
+        publicClient,
+        webSocketPublicClient,
+        // Required API Keys
+        alchemyId: process.env.ALCHEMY_ID, // or infuraId
+        walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID,
+        chains: defaultChains,
+
+        // Required
+        appName: "Tobi",
+    }),
+);
 
 export const WagmiProvider = ({ children }: { children: React.ReactNode }) => {
     const [mounted, setMounted] = React.useState(false);
     React.useEffect(() => setMounted(true), []);
     return (
         <WagmiConfig config={config}>
-            {mounted && children}
+            <ConnectKitProvider>
+                {mounted && children}
+            </ConnectKitProvider>
         </WagmiConfig>
     )
 }
