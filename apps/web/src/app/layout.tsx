@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import { Metadata } from 'next'
 import "ui/styles.css";
 import Header from '../components/NavBar/Header'
-import { WagmiProvider } from '../components/Provider/wagmiProvider'
+import { WagmiProvider } from '../components/Provider/WagmiProvider'
 import ClientOnly from '../components/ClientOnly'
 
 
