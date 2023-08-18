@@ -1,0 +1,21 @@
+{
+    "name": "utilsx",
+    "version": "0.0.0",
+    "main": "index.js",
+    "export": {
+      ".": "./dist"
+    },
+    "scripts": {
+      "build": "tsc"
+    },
+    "dependencies": {
+      "tsconfig": "workspace:*"
+    },
+    "devDependencies": {
+      "typescript": "^5.0.4"
+    },
+    "publishConfig": {
+      "access": "public"
+    }
+  }
+  

@@ -4,7 +4,6 @@ import { Chain, configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { goerli, polygonMumbai, sepolia } from 'wagmi/chains'
 import { ConnectKitProvider, getDefaultConfig } from "connectkit"
 import { publicProvider } from 'wagmi/providers/public'
-import * as React from 'react';
 
 const defaultChains: Chain[] = [
     goerli,
@@ -31,12 +30,10 @@ const config = createConfig(
 );
 
 export const WagmiProvider = ({ children }: { children: React.ReactNode }) => {
-    const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => setMounted(true), []);
     return (
         <WagmiConfig config={config}>
             <ConnectKitProvider>
-                {mounted && children}
+                {children}
             </ConnectKitProvider>
         </WagmiConfig>
     )
