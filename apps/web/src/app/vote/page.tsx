@@ -3,19 +3,19 @@
 import WebcamCapture from '../../components/Webcam/WebcamCapture'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 import GenerateProof from '../../components/ZK/GenerateProof'
+import VerifyProof from '../../components/ZK/VerifyProof'
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 
 export default function Vote() {
     const { address, isConnected } = useAccount()
-    const [mounted, setMounted] = useState(false);
-    const [isCaptureDialogOpen, setIsCaptureDialogOpen] = useState(false);
-    const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false);
-    const [isGenProofDialogOpen, setIsGenProofDialogOpen] = useState(false);
-    const [imgSrc, setImgSrc] = useState(null);
-    const [copied, setCopied] = useState(false);
-
-    const [proof, setProof] = useState(false);
+    const [mounted, setMounted] = useState(false)
+    const [isCaptureDialogOpen, setIsCaptureDialogOpen] = useState(false)
+    const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false)
+    const [isGenProofDialogOpen, setIsGenProofDialogOpen] = useState(false)
+    const [isVerified, setVerified] = useState(false)
+    const [imgSrc, setImgSrc] = useState(null)
+    const [copied, setCopied] = useState(false)
     
     async function openCaptureDialog() {
         setIsCaptureDialogOpen(!isCaptureDialogOpen)
@@ -30,11 +30,11 @@ export default function Vote() {
     }
 
     const handleCopyClick = () => {
-        setCopied(true);
+        setCopied(true)
         setTimeout(() => {
-          setCopied(false);
-        }, 1000);
-      };
+          setCopied(false)
+        }, 1000)
+      }
 
     useEffect(() => {
         if(isConnected){
@@ -42,17 +42,17 @@ export default function Vote() {
         }else{
             setMounted(false)
         }
-    }, [address, isConnected]);
+    }, [address, isConnected])
 
     return (
-        <div className="flex items-center justify-center">
-            <div className="mx-auto w-full px-8 pt-8 pb-8">
+        <div className='flex items-center justify-center'>
+            <div className='mx-auto w-full px-8 pt-8 pb-8'>
                 <div className='flex-col'>
                     <div className='flex flex-row space-x-3 items-center'>
-                        <p className="font-mono text-black font-bold text-3xl dark:text-white my-4">
+                        <p className='font-mono text-black font-bold text-3xl dark:text-white my-4'>
                             Account Status
                         </p>
-                        {mounted
+                        {isVerified
                             ? <div className='badge badge-accent'>Verified</div>
                             : <div className='badge badge-secondary'>Unverified</div>
                         }
@@ -83,7 +83,7 @@ export default function Vote() {
                     </div>
                     <div className='divider'></div>
                     
-                    <p className="font-mono text-black font-bold text-3xl mb-4 dark:text-white">
+                    <p className='font-mono text-black font-bold text-3xl mb-4 dark:text-white'>
                         Proposal
                     </p>
                 </div>
@@ -106,12 +106,12 @@ export default function Vote() {
                     onClose={()=>setIsVerifyDialogOpen(false)}
                     title={'Verify proof'}
                 >
-                    <WebcamCapture setImgSrc={setImgSrc} onClose={()=>setIsVerifyDialogOpen(false)}/>
+                    <VerifyProof setVerified={setVerified} onClose={()=>setIsVerifyDialogOpen(false)}/>
                 </ProcessDialog>
                 {
                     copied && 
-                    <div className="toast toast-top toast-end">
-                        <div className="alert alert-success">
+                    <div className='toast toast-top toast-end'>
+                        <div className='alert alert-success'>
                             <span>Copied to clipboard</span>
                         </div>
                     </div>
@@ -120,5 +120,5 @@ export default function Vote() {
                  
         </div >
         
-    );
+    )
 }

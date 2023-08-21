@@ -21,10 +21,6 @@ const GenerateProof = ({imgSrc, handleCopyClick, onClose}: GenerateProofProps) =
         await sleep(2000)
     }
 
-    const reGenProof = async () => {
-        setProof(null)
-    }
-
     const handleCopyProof = () => {
         const textToCopy = proof
         navigator.clipboard.writeText(textToCopy as string).then(() => {
