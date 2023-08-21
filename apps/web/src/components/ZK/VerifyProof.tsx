@@ -6,20 +6,30 @@ import { useAccount } from 'wagmi'
 
 export interface VerifyProofProps {
     setVerified: any
+    setIsLoading: any
     onClose: any
 }
 
-const VerifyProof = ({ setVerified, onClose }: VerifyProofProps) => {
+const VerifyProof = ({ setVerified, setIsLoading, onClose }: VerifyProofProps) => {
     const [proof, setProof] = useState('')
     const [isProcess, setIsProcess] = useState(false)
     const [isPassed, setIsPassed] = useState(false)
     const { address, isConnected } = useAccount()
 
-    const verifyProof = async () => {
-        setIsProcess(true)
-        const result = proof === 'pass' ? await setIsPassed(true) : null
-        console.log(proof)
-        await sleep(4000)
+
+
+    const handleVerify = async () => {
+        try {
+            setIsLoading(true)
+            await sleep(4000)
+            const result = proof === 'pass' ? await setIsPassed(true) : null
+            console.log(proof)
+            setIsProcess(true)
+            setIsLoading(false)
+        } catch (error) {
+            console.log('error: ', error)
+            setIsLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -52,7 +62,7 @@ const VerifyProof = ({ setVerified, onClose }: VerifyProofProps) => {
                             </label>
                             <textarea className='textarea textarea-bordered textarea-lg w-full max-w-lg' onChange={(e) => { setProof(e.target.value) }}></textarea>
                         </div>
-                        <div className='btn' onClick={verifyProof} >Verify</div>
+                        <div className='btn' onClick={handleVerify} >Verify</div>
                     </>
             }
         </div>

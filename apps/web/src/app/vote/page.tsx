@@ -4,10 +4,14 @@ import WebcamCapture from '../../components/Webcam/WebcamCapture'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 import GenerateProof from '../../components/ZK/GenerateProof'
 import VerifyProof from '../../components/ZK/VerifyProof'
+import ProcessLoading from '../../components/Loading/ProcessLoading'
+import KamuiLoading from '../../components/Loading/KamuiLoading'
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 
 export default function Vote() {
+    const [isLoading, setIsLoading] = useState(false);
+    const [isKamuiLoading, setIsKamuiLoading] = useState(false);
     const { address, isConnected } = useAccount()
     const [mounted, setMounted] = useState(false)
     const [isCaptureDialogOpen, setIsCaptureDialogOpen] = useState(false)
@@ -16,15 +20,15 @@ export default function Vote() {
     const [isVerified, setVerified] = useState(false)
     const [imgSrc, setImgSrc] = useState(null)
     const [copied, setCopied] = useState(false)
-    
+
     async function openCaptureDialog() {
         setIsCaptureDialogOpen(!isCaptureDialogOpen)
-      }
-    
+    }
+
     async function openGenProofDialog() {
         setIsGenProofDialogOpen(!isGenProofDialogOpen)
     }
-    
+
     async function openVerifyDialog() {
         setIsVerifyDialogOpen(!isVerifyDialogOpen)
     }
@@ -32,14 +36,14 @@ export default function Vote() {
     const handleCopyClick = () => {
         setCopied(true)
         setTimeout(() => {
-          setCopied(false)
+            setCopied(false)
         }, 1000)
-      }
+    }
 
     useEffect(() => {
-        if(isConnected){
+        if (isConnected) {
             setMounted(true)
-        }else{
+        } else {
             setMounted(false)
         }
     }, [address, isConnected])
@@ -67,11 +71,11 @@ export default function Vote() {
                         <div className='flex flex-col items-center space-y-5'>
                             <span className='font-mono'>2. Check your face to generate proof</span>
                             <div className='bg-gradient-to-r from-[#42275a] to-[#734b6d] card w-[350px] p-4 text-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
-                            {
-                                imgSrc 
-                                ? <div className='btn btn-ghost' onClick={openGenProofDialog}>Generate Proof</div>
-                                : <div className='btn btn-ghost' onClick={openCaptureDialog}>Need to capture face first</div>
-                            }
+                                {
+                                    imgSrc
+                                        ? <div className='btn btn-ghost' onClick={openGenProofDialog}>Generate Proof</div>
+                                        : <div className='btn btn-ghost' onClick={openCaptureDialog}>Need to capture face first</div>
+                                }
                             </div>
                         </div>
                         <div className='flex flex-col items-center space-y-5'>
@@ -82,43 +86,45 @@ export default function Vote() {
                         </div>
                     </div>
                     <div className='divider'></div>
-                    
+
                     <p className='font-mono text-black font-bold text-3xl mb-4 dark:text-white'>
                         Proposal
                     </p>
                 </div>
                 <ProcessDialog
                     isOpen={isCaptureDialogOpen}
-                    onClose={()=>setIsCaptureDialogOpen(false)}
+                    onClose={() => setIsCaptureDialogOpen(false)}
                     title={'Capture Face'}
                 >
-                    <WebcamCapture setImgSrc={setImgSrc} onClose={()=>setIsCaptureDialogOpen(false)}/>
-                </ProcessDialog>   
+                    <WebcamCapture setImgSrc={setImgSrc} onClose={() => setIsCaptureDialogOpen(false)} />
+                </ProcessDialog>
                 <ProcessDialog
                     isOpen={isGenProofDialogOpen}
-                    onClose={()=>setIsGenProofDialogOpen(false)}
+                    onClose={() => setIsGenProofDialogOpen(false)}
                     title={'Generate proof'}
                 >
-                    <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} onClose={()=>setIsGenProofDialogOpen(false)}/>
-                </ProcessDialog>  
+                    <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setIsLoading={setIsLoading} onClose={() => setIsGenProofDialogOpen(false)} />
+                </ProcessDialog>
                 <ProcessDialog
                     isOpen={isVerifyDialogOpen}
-                    onClose={()=>setIsVerifyDialogOpen(false)}
+                    onClose={() => setIsVerifyDialogOpen(false)}
                     title={'Verify proof'}
                 >
-                    <VerifyProof setVerified={setVerified} onClose={()=>setIsVerifyDialogOpen(false)}/>
+                    <VerifyProof setVerified={setVerified} setIsLoading={setIsLoading} onClose={() => setIsVerifyDialogOpen(false)} />
                 </ProcessDialog>
+                {isLoading && <ProcessLoading />}
+                {isKamuiLoading && <KamuiLoading />}
                 {
-                    copied && 
+                    copied &&
                     <div className='toast toast-top toast-end'>
                         <div className='alert alert-success'>
                             <span>Copied to clipboard</span>
                         </div>
                     </div>
-                }  
+                }
             </div>
-                 
+
         </div >
-        
+
     )
 }
