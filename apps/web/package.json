@@ -15,7 +15,7 @@
     "react-dom": "^18.2.0",
     "react-webcam": "^7.1.1",
     "ui": "workspace:*",
-    "utilsx": "workspace:*",
+    "helper": "workspace:*",
     "viem": "^1.6.0",
     "wagmi": "^1.3.10"
   },

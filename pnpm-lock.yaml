@@ -75,6 +75,9 @@ importers:
       connectkit:
         specifier: ^1.5.1
         version: 1.5.1(@babel/core@7.22.10)(react-dom@18.2.0)(react-is@16.13.1)(react@18.2.0)(viem@1.6.0)(wagmi@1.3.10)
+      helper:
+        specifier: workspace:*
+        version: link:../../packages/helper
       next:
         specifier: ^13.4.1
         version: 13.4.1(@babel/core@7.22.10)(react-dom@18.2.0)(react@18.2.0)
@@ -90,9 +93,6 @@ importers:
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
-      utilsx:
-        specifier: workspace:*
-        version: link:../../packages/utilsx
       viem:
         specifier: ^1.6.0
         version: 1.6.0(typescript@5.0.4)
@@ -149,6 +149,19 @@ importers:
         specifier: 7.28.0
         version: 7.28.0(eslint@7.32.0)
 
+  packages/helper:
+    dependencies:
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+    devDependencies:
+      tsup:
+        specifier: ^6.1.3
+        version: 6.5.0(postcss@8.4.20)(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
   packages/tailwind-config:
     devDependencies:
       tailwindcss:
@@ -186,16 +199,6 @@ importers:
       tsup:
         specifier: ^6.1.3
         version: 6.5.0(postcss@8.4.20)(typescript@5.0.4)
-      typescript:
-        specifier: ^5.0.4
-        version: 5.0.4
-
-  packages/utilsx:
-    dependencies:
-      tsconfig:
-        specifier: workspace:*
-        version: link:../tsconfig
-    devDependencies:
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -2680,6 +2683,7 @@ packages:
   /esbuild@0.15.15:
     resolution: {integrity: sha512-TEw/lwK4Zzld9x3FedV6jy8onOUHqcEX3ADFk4k+gzPUwrxn8nWV62tH0udo8jOtjFodlEfc4ypsqX3e+WWO6w==}
     engines: {node: '>=12'}
+    hasBin: true
     requiresBuild: true
     optionalDependencies:
       '@esbuild/android-arm': 0.15.15
@@ -4565,6 +4569,7 @@ packages:
   /rollup@3.4.0:
     resolution: {integrity: sha512-4g8ZrEFK7UbDvy3JF+d5bLiC8UKkS3n/27/cnVeESwB1LVPl6MoPL32/6+SCQ1vHTp6Mvp2veIHtwELhi+uXEw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -4857,6 +4862,7 @@ packages:
   /sucrase@3.29.0:
     resolution: {integrity: sha512-bZPAuGA5SdFHuzqIhTAqt9fvNEo9rESqXIG3oiKdF8K4UmkQxC4KlNL3lVyAErXp+mPvUqZ5l13qx6TrDIGf3A==}
     engines: {node: '>=8'}
+    hasBin: true
     dependencies:
       commander: 4.1.1
       glob: 7.1.6
@@ -5012,6 +5018,7 @@ packages:
 
   /tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
+    hasBin: true
     dev: true
 
   /ts-interface-checker@0.1.13:
