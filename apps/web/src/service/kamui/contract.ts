@@ -1,6 +1,6 @@
 'use client'
 
-import { writeContract, prepareWriteContract, getNetwork } from 'wagmi/actions'
+import { writeContract, prepareWriteContract, getNetwork, readContract } from 'wagmi/actions'
 import { wagmiAbi } from './abi'
 import { zkproof } from './verify'
 import { publicClient, walletClient, account } from './client'
@@ -27,35 +27,35 @@ export const registerUser = async (userAddress: string, poseidonHash: string,) =
 
 export const createProposal = async (name: string, endTime: number) => {
   const { chain } = getNetwork()
-  const config = await prepareWriteContract({
+  const { request } = await prepareWriteContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'createProposals',
     args: [name, endTime],
   })
-  await writeContract(config)
+  await writeContract(request)
 }
 
 export const vote = async (credentialHash: string, proposalId: number, accept: boolean) => {
   const proof = await zkproof(credentialHash)
   const { chain } = getNetwork()
 
-  const config = await prepareWriteContract({
+  const { request } = await prepareWriteContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'vote',
     args: [proposalId, accept, proof],
   })
-  await writeContract(config)
+  await writeContract(request)
 }
 
-export const getResult = async (proposal: number) => {
+export const getResult = async (proposal: bigint) => {
   const { chain } = getNetwork()
 
   const data = await readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
-    functionName: 'getResult(uint256)',
+    functionName: 'getResult',
     args: [proposal],
   })
   return data
@@ -67,20 +67,20 @@ export const getBlockTime = async () => {
   const data = await readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
-    functionName: 'getBlockTime()',
-    args: [],
+    functionName: 'getBlockTime',
   })
   return data
 }
 
 export const getProposal = async (proposalId: number) => {
   const { chain } = getNetwork()
+  console.log(proposalId)
   const data = await readContract({
     // @ts-ignore
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
-    functionName: 'proposals(uint256)',
-    args: [proposalId],
+    functionName: 'proposals',
+    args: [BigInt(proposalId)],
   })
   return data
 }
@@ -90,17 +90,16 @@ export const getProposalCount = async () => {
 
   const data = await readContract({
     address: contractAddress[chain!.name],
-    abi: abi,
-    functionName: 'totalProposals()',
-    args: [],
+    abi: wagmiAbi,
+    functionName: 'totalProposals',
   })
   return data
 }
 
 export const getProposals = async () => {
   let proposals = []
-  const count = (await getProposalCount()) as number
-  for (let i = 0 ; i < count ; i++) {
+  const count = Number(await getProposalCount())
+  for (let i = 0; i < count; i++) {
     const proposal = await getProposal(i)
     proposals.push(proposal)
   }

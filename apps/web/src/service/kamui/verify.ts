@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers'
 const { buildPoseidon } = require('circomlibjs')
 const { groth16 } = require('snarkjs')
 
@@ -6,14 +7,14 @@ export async function exportSolidity({ proof, publicSignals }: any) {
   const tokens = rawCallData
     .replace(/["[\]\s]/g, "")
     .split(",")
-    .map(BigInt.from);
+    .map(BigNumber.from);
   const [a1, a2, b1, b2, b3, b4, c1, c2, ...inputs] = tokens;
-  const a: [BigInt, BigInt] = [a1, a2];
-  const b: [[BigInt, BigInt], [BigInt, BigInt]] = [
+  const a: [BigNumber, BigNumber] = [a1, a2];
+  const b: [[BigNumber, BigNumber], [BigNumber, BigNumber]] = [
     [b1, b2],
     [b3, b4],
   ]
-  const c: [BigInt, BigInt] = [c1, c2]
+  const c: [BigNumber, BigNumber] = [c1, c2]
   return {
     a, b, c, inputs
   }
