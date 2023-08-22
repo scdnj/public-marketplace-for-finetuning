@@ -16,8 +16,6 @@ const VerifyProof = ({ setVerified, setIsLoading, onClose }: VerifyProofProps) =
     const [isPassed, setIsPassed] = useState(false)
     const { address, isConnected } = useAccount()
 
-
-
     const handleVerify = async () => {
         try {
             setIsLoading(true)
@@ -56,11 +54,11 @@ const VerifyProof = ({ setVerified, setIsLoading, onClose }: VerifyProofProps) =
                         <div className="btn" onClick={onClose} >OK</div>
                     </>
                     : <>
-                        <div className='form-control pb-4 w-500 h-500'>
+                        <div className='form-control pb-4'>
                             <label className='label'>
                                 <span className='label-text'>Paste Proof</span>
                             </label>
-                            <textarea className='textarea textarea-bordered textarea-lg w-full max-w-lg' onChange={(e) => { setProof(e.target.value) }}></textarea>
+                            <textarea className='textarea textarea-bordered textarea-lg max-w-lg w-[350px] h-[200px]' onChange={(e) => { setProof(e.target.value) }}></textarea>
                         </div>
                         <div className='btn' onClick={handleVerify} >Verify</div>
                     </>

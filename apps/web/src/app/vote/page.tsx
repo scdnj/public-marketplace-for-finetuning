@@ -4,8 +4,11 @@ import WebcamCapture from '../../components/Webcam/WebcamCapture'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 import GenerateProof from '../../components/ZK/GenerateProof'
 import VerifyProof from '../../components/ZK/VerifyProof'
+import CreateProposal from '../../components/Contract/CreateProposal'
 import ProcessLoading from '../../components/Loading/ProcessLoading'
 import KamuiLoading from '../../components/Loading/KamuiLoading'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 
@@ -17,20 +20,26 @@ export default function Vote() {
     const [isCaptureDialogOpen, setIsCaptureDialogOpen] = useState(false)
     const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false)
     const [isGenProofDialogOpen, setIsGenProofDialogOpen] = useState(false)
+    const [isCreateProposalDialogOpen, setIsCreateProposalDialogOpen] = useState(false)
     const [isVerified, setVerified] = useState(false)
     const [imgSrc, setImgSrc] = useState(null)
     const [copied, setCopied] = useState(false)
 
-    async function openCaptureDialog() {
-        setIsCaptureDialogOpen(!isCaptureDialogOpen)
-    }
+    const openCaptureDialog = async () => {
+        setIsCaptureDialogOpen(!isCaptureDialogOpen);
+      };
+      
+    const openGenProofDialog = async () => {
+        setIsGenProofDialogOpen(!isGenProofDialogOpen);
+    };
+    
+    const openVerifyDialog = async () => {
+        setIsVerifyDialogOpen(!isVerifyDialogOpen);
+    };
+      
 
-    async function openGenProofDialog() {
-        setIsGenProofDialogOpen(!isGenProofDialogOpen)
-    }
-
-    async function openVerifyDialog() {
-        setIsVerifyDialogOpen(!isVerifyDialogOpen)
+    const openCreateProposalDialog = async () => {
+        setIsCreateProposalDialogOpen(!isCreateProposalDialogOpen)
     }
 
     const handleCopyClick = () => {
@@ -49,6 +58,8 @@ export default function Vote() {
     }, [address, isConnected])
 
     return (
+        <LocalizationProvider dateAdapter={AdapterDayjs as any} >
+
         <div className='flex items-center justify-center'>
             <div className='mx-auto w-full px-8 pt-8 pb-8'>
                 <div className='flex-col'>
@@ -86,10 +97,22 @@ export default function Vote() {
                         </div>
                     </div>
                     <div className='divider'></div>
-
-                    <p className='font-mono text-black font-bold text-3xl mb-4 dark:text-white'>
-                        Proposal
-                    </p>
+                        <div className='container w-full flex flex-row space-x-3 items-center'>
+                            <div className="flex w-full justify-start">
+                                <p className='font-mono text-black font-bold text-3xl dark:text-white my-4'>
+                                    KAMUI FIELD
+                                </p>
+                            </div>
+                            <div className='flex w-full justify-end'>
+                                <div className='btn bg-primary hover:bg-primary-focus' onClick={openCreateProposalDialog}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#A6ADBA" className="w-6 h-6">
+                                        <path fillRule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clipRule="evenodd" />
+                                        <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0016.5 7.5h-1.875a.375.375 0 01-.375-.375V5.25z" />
+                                    </svg>
+                                    <span className='text-base-content'>New Proposal</span>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <ProcessDialog
                     isOpen={isCaptureDialogOpen}
@@ -112,6 +135,13 @@ export default function Vote() {
                 >
                     <VerifyProof setVerified={setVerified} setIsLoading={setIsLoading} onClose={() => setIsVerifyDialogOpen(false)} />
                 </ProcessDialog>
+                <ProcessDialog
+                    isOpen={isCreateProposalDialogOpen}
+                    onClose={() => setIsCreateProposalDialogOpen(false)}
+                    title={'New Proposal'}
+                >
+                    <CreateProposal setIsLoading={setIsLoading} onClose={() => setIsCreateProposalDialogOpen(false)} />
+                </ProcessDialog>
                 {isLoading && <ProcessLoading />}
                 {isKamuiLoading && <KamuiLoading />}
                 {
@@ -125,6 +155,7 @@ export default function Vote() {
             </div>
 
         </div >
+        </LocalizationProvider>
 
     )
 }
