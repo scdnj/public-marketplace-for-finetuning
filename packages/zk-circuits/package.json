@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
+    "deploy": "hardhat deploy:kamui --network sepolia --verify",
+    "deploy:zk": "hardhat deploy:verifier --network sepolia --verify",
     "circom:dev": "hardhat circom --deterministic --debug --verbose",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
