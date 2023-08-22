@@ -134,7 +134,7 @@ export const wagmiAbi = [
       },
       {
         "internalType": "address",
-        "name": "creater",
+        "name": "creator",
         "type": "address"
       },
       {

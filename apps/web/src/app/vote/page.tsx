@@ -126,19 +126,20 @@ export default function Vote() {
                         </div>
                         <div className="mb-10 grid xl-[1320px] xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-items-center">
                             {proposals.map((proposal: any, index: number) => {
+                                const [name, creator, acceptCount, denyCount, endTime] = proposal
                                 let status = "Open"
-                                if (Date.now().valueOf() > new Date(dayjs.unix(proposal.endTime).format("MM/DD/YYYY HH:mm:ss")).valueOf()) {
+                                if (Date.now().valueOf() > new Date(dayjs.unix(Number(proposal.endTime)).format("MM/DD/YYYY HH:mm:ss")).valueOf()) {
                                     status = "Closed"
                                 }
                                 if (proposalStatus === status || proposalStatus === "All" || proposalStatus === "init") {
                                     return (
                                         <ProposalCard
                                             proposalId={index}
-                                            creater={proposal.creater}
-                                            proposalBody={proposal.name}
-                                            acceptCount={proposal.acceptCount}
-                                            denyCount={proposal.denyCount}
-                                            endTime={proposal.endTime}
+                                            creator={creator}
+                                            proposalBody={name}
+                                            acceptCount={acceptCount}
+                                            denyCount={denyCount}
+                                            endTime={Number(proposal.endTime)}
                                             credentialHash={credentialHash}
                                             status={status}
                                             key={index}

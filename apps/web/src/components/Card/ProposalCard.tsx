@@ -9,29 +9,29 @@ export interface ProposalCard {
     proposalBody: string,
     acceptCount: any,
     denyCount: any,
-    creater: string,
+    creator: string,
     endTime: any,
     credentialHash: string
     status: string
 }
 
 const ProposalCard = (props: ProposalCard) => {
-    const router = useRouter();
-    function handleClick() {
-        router.push({
-            pathname: "/card",
-            query: {
-                proposalId: props.proposalId,
-                proposalBody: props.proposalBody,
-                acceptCount: props.acceptCount.toString(),
-                denyCount: props.denyCount.toString(),
-                creater: props.creater,
-                endTime: props.endTime.toString(),
-                credentialHash: props.credentialHash,
-                status: props.status,
-            },
-        });
-    }
+    // const router = useRouter();
+    // function handleClick() {
+    //     router.push({
+    //         pathname: "/card",
+    //         query: {
+    //             proposalId: props.proposalId,
+    //             proposalBody: props.proposalBody,
+    //             acceptCount: props.acceptCount.toString(),
+    //             denyCount: props.denyCount.toString(),
+    //             creator: props.creator,
+    //             endTime: props.endTime.toString(),
+    //             credentialHash: props.credentialHash,
+    //             status: props.status,
+    //         },
+    //     });
+    // }
 
     function calPercentage(): number | string {
         if (props.denyCount._hex === "0x00" && props.acceptCount._hex === "0x00")
@@ -64,7 +64,6 @@ const ProposalCard = (props: ProposalCard) => {
     return (
         <div
             className=" card dark:text-white dark:bg-slate-800 dark:border-white dark:border-solid dark:border-2 w-[350px] p-4 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mt-3 cursor-pointer text-[#2E1503] "
-            onClick={handleClick}
         >
             <div className="card-body">
                 <div className="flex items-center mb-2">

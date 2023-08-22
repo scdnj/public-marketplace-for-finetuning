@@ -4,6 +4,7 @@ import { writeContract, prepareWriteContract, getNetwork, readContract } from 'w
 import { wagmiAbi } from './abi'
 import { zkproof } from './verify'
 import { publicClient, walletClient, account } from './client'
+import { copyFileSync } from 'fs'
 
 const { buildPoseidon } = require('circomlibjs')
 
@@ -74,14 +75,13 @@ export const getBlockTime = async () => {
 
 export const getProposal = async (proposalId: number) => {
   const { chain } = getNetwork()
-  console.log(proposalId)
   const data = await readContract({
-    // @ts-ignore
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'proposals',
     args: [BigInt(proposalId)],
   })
+  console.log()
   return data
 }
 
