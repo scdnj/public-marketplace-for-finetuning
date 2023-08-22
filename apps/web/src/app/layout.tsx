@@ -18,13 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-zinc-900">
+    <html lang="en">
       <body className="overflow-hidden">
         <WagmiProvider>
           <ClientOnly>
             <Header />
           </ClientOnly>
-          <div className="grow bg-cat-base overflow-y-auto" >{children}</div>
+          <div className="grow bg-cat-base overflow-y-auto" style={{ height: 'calc(100vh - 108px)' }}>{children}</div>
         </WagmiProvider>
       </body>
     </html>
