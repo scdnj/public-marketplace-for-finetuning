@@ -220,6 +220,9 @@ importers:
       circomlib:
         specifier: ^2.0.5
         version: 2.0.5
+      circomlib-ml:
+        specifier: ^1.4.4
+        version: 1.4.4
       circomlibjs:
         specifier: ^0.1.7
         version: 0.1.7
@@ -238,6 +241,9 @@ importers:
       snarkjs:
         specifier: ^0.7.0
         version: 0.7.0
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
       typescript:
         specifier: ^4.9.4
         version: 4.9.4
@@ -3688,6 +3694,10 @@ packages:
     hasBin: true
     dependencies:
       ffjavascript: 0.2.57
+    dev: true
+
+  /circomlib-ml@1.4.4:
+    resolution: {integrity: sha512-7EHHgtC7mR4jB0pzGulaEkZskfvbI9zWGanMsi9/b4OrBu4gNlC0A96t4B/DMCBLZWjlZkAhK4ucwrJ7NB0kjw==}
     dev: true
 
   /circomlib@2.0.5:
