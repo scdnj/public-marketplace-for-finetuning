@@ -1,28 +1,6 @@
 import { Metadata } from "next";
 import { Button, Card } from "ui";
 
-const CARD_CONTENT = [
-  {
-    title: "Dashboard",
-    href: "./core-concepts/caching",
-    cta: "Read More",
-  },
-  {
-    title: "Deposit",
-    href: "https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks",
-    cta: "Read More",
-  },
-  {
-    title: "Withdraw",
-    href: "https://turbo.build/repo/docs/reference/configuration",
-    cta: "Read More",
-  },
-];
-
-export const metadata: Metadata = {
-  title: "Tobi - Turborepo Example",
-};
-
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center">
@@ -33,12 +11,6 @@ export default function Home() {
             Time-lock Omni Bridge Interface
           </span>
         </h1>
-
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 place-content-evenly">
-          {CARD_CONTENT.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
       </main>
     </div>
   );

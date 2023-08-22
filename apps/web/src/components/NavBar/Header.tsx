@@ -14,7 +14,7 @@ const Header: React.FC = () => {
         <Link href={'/home'}>
           <Image
               alt='Tobi'
-              src='/tobi.png'
+              src='/tobi/tobi.png'
               width={500}
               height={500}
               className='w-14 h-14'

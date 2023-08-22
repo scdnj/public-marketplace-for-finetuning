@@ -6,9 +6,13 @@ import Header from '../components/NavBar/Header'
 import { WagmiProvider } from '../components/Provider/WagmiProvider'
 import ClientOnly from '../components/ClientOnly'
 
-
 export const metadata: Metadata = {
   title: 'Tobi',
+  icons: {
+    icon: [
+      '/tobi/tobi.png'
+    ]
+  },
   description: 'Welcome to HollowLeaf',
 }
 
