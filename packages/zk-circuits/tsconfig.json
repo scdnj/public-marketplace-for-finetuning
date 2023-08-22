@@ -1,0 +1,5 @@
+{
+  "extends": "tsconfig/base.json",
+  "include": ["hardhhat.config.ts"],
+  "exclude": ["node_modules"]
+}
