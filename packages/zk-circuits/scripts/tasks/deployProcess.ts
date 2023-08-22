@@ -29,7 +29,7 @@ task('deploy:kamui', 'Deploy contract')
     await hre.run('compile')
     const [signer] = await hre.ethers.getSigners()
 
-    const contractAddress = fs.readFileSync(`scripts/address/${hre.network.name}/Verifier.json`)
+    const contractAddress = fs.readFileSync(`scripts/address/${hre.network.name}/CircuitsVerifier.json`)
     const himitsuAddress = JSON.parse(contractAddress.toString())
 
     const feeData = await hre.ethers.provider.getFeeData()
@@ -71,7 +71,7 @@ task('deploy:kamui', 'Deploy contract')
   .setAction(async ({verify}, hre) => {
     await hre.run('compile')
     const [signer] = await hre.ethers.getSigners()
-    const contractFactory = await hre.ethers.getContractFactory('contracts/Verifier.sol:Verifier')
+    const contractFactory = await hre.ethers.getContractFactory('contracts/CircuitsVerifier.sol:Verifier')
     // if you mint in constructor, you need to add value in deploy function
     const feeData = await hre.ethers.provider.getFeeData()
     const deployContract = await contractFactory.connect(signer).deploy({
@@ -79,13 +79,13 @@ task('deploy:kamui', 'Deploy contract')
       maxFeePerGas: feeData.maxFeePerGas,
       gasLimit: 4000000,
     })
-    console.log(`Verifier.sol deployed to ${deployContract.address}`)
+    console.log(`CircuitsVerifier.sol deployed to ${deployContract.address}`)
 
     const address = {
       main: deployContract.address,
     }
     const addressData = JSON.stringify(address)
-    writeFileSync(`scripts/address/${hre.network.name}/`, 'Verifier.json', addressData)
+    writeFileSync(`scripts/address/${hre.network.name}/`, 'CircuitsVerifier.json', addressData)
 
     await deployContract.deployed()
     
@@ -97,7 +97,7 @@ task('deploy:kamui', 'Deploy contract')
         await hre.run('verify:verify', {
           address: deployContract.address,
           constructorArguments: [],
-          contract: 'contracts/Verifier.sol:Verifier',
+          contract: 'contracts/CircuitsVerifier.sol:Verifier',
         })
       } catch (e) {
         console.log(e)

@@ -2,7 +2,7 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./interface/IVerifier.sol";
+import "./interface/ICircuitsVerifier.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract KamuiField is Ownable {
@@ -23,11 +23,13 @@ contract KamuiField is Ownable {
         uint[2][2] b;
         uint[2] c;
     }
-    
-    IVerifier public verifier;
+
+    event Voted(address indexed from, uint256 proposal, bool accept);
+
+    ICircuitsVerifier public verifier;
 
     constructor(address _verifierAddress) {
-        verifier = IVerifier(_verifierAddress);
+        verifier = ICircuitsVerifier(_verifierAddress);
     }
 
     mapping(address => mapping(uint256 => Voter)) public voters;
@@ -47,13 +49,14 @@ contract KamuiField is Ownable {
     }
 
     function vote(uint256 proposal, bool accept, ProofData memory proofData) public {
-        require(verifyProof(proofData, users[msg.sender]), "Verification Failed");
+        require(verifyProof(proofData), "Verification Failed");
         Voter storage sender = voters[msg.sender][proposal];
         require(block.timestamp < proposals[proposal].endTime, "Vote End");
         require(!sender.voted, "Already voted.");
         sender.voted = true;
         if (accept) proposals[proposal].acceptCount += 1;
         else proposals[proposal].denyCount += 1;
+        emit Voted(msg.sender, proposal, accept);
     }
 
    function getResult (uint256 proposal) public view returns (bool) {
@@ -66,12 +69,11 @@ contract KamuiField is Ownable {
         return block.timestamp;
    }
 
-   function verifyProof(ProofData memory proofData, uint[1] memory input) public view returns (bool) {
+   function verifyProof(ProofData memory proofData) public view returns (bool) {
         return verifier.verifyProof(
             proofData.a,
             proofData.b,
-            proofData.c,
-            input
+            proofData.c
         );
    }
 

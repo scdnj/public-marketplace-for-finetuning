@@ -37,3 +37,6 @@ dist/
 artifacts/
 .env
 temp
+
+#zk-circuits
+typechain/
