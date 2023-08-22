@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers'
 const { buildPoseidon } = require('circomlibjs')
 const { groth16 } = require('snarkjs')
 
@@ -7,14 +6,14 @@ export async function exportSolidity({ proof, publicSignals }: any) {
   const tokens = rawCallData
     .replace(/["[\]\s]/g, "")
     .split(",")
-    .map(BigNumber.from);
+    .map(BigInt.from);
   const [a1, a2, b1, b2, b3, b4, c1, c2, ...inputs] = tokens;
-  const a: [BigNumber, BigNumber] = [a1, a2] ;
-  const b: [[BigNumber, BigNumber], [BigNumber, BigNumber]] = [
+  const a: [BigInt, BigInt] = [a1, a2];
+  const b: [[BigInt, BigInt], [BigInt, BigInt]] = [
     [b1, b2],
     [b3, b4],
   ]
-  const c: [BigNumber, BigNumber] = [c1, c2]
+  const c: [BigInt, BigInt] = [c1, c2]
   return {
     a, b, c, inputs
   }
@@ -35,13 +34,13 @@ export async function zkproof(credentialHash: string) {
   // generate VC hash
   const filePathWASM: string = '/circuits.wasm'
   const filePathZKEY: string = '/circuits.zkey'
-  
+
   // issuer send this hash
   const poseidon = await buildPoseidon()
   const inputs = credentialHash
   const poseidonHash = poseidon.F.toString(poseidon([hexToDecimal(inputs)]))
   // console.log('poseidon hash:', poseidonHash)
-  
+
   const circuitInputs = {
     value: `0x${inputs}`,
     hash: poseidonHash,
