@@ -38,8 +38,8 @@
       ]
     },
     "/Users/cfh00890942/Workspace/hackathon/tobi/tobi/packages/zk-circuits/contracts/KamuiField.sol": {
-      "lastModificationDate": 1692683300525,
-      "contentHash": "b49d12f052507f42b5d15edf027903c3",
+      "lastModificationDate": 1692752824894,
+      "contentHash": "12e0626f9056032498d5f49396604050",
       "sourceName": "contracts/KamuiField.sol",
       "solcConfig": {
         "version": "0.8.18",

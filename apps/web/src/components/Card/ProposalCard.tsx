@@ -34,10 +34,10 @@ const ProposalCard = (props: ProposalCard) => {
     // }
 
     function calPercentage(): number | string {
-        if (props.denyCount._hex === "0x00" && props.acceptCount._hex === "0x00")
+        if (props.denyCount === 0 && props.acceptCount === 0)
             return "no vote";
-        if (props.acceptCount._hex === "0x00" || undefined) return 100;
-        if (props.denyCount._hex === "0x00" || undefined) return 0;
+        if (props.acceptCount === 0 || undefined) return 100;
+        if (props.denyCount === 0 || undefined) return 0;
         const result = roundToTwoDecimalPlaces(
             (Number(props.denyCount.toString()) /
                 (Number(props.acceptCount.toString()) +
@@ -60,10 +60,9 @@ const ProposalCard = (props: ProposalCard) => {
         vote(props.credentialHash, props.proposalId, false);
         e.stopPropagation();
     }
-
     return (
         <div
-            className=" card dark:text-white dark:bg-slate-800 dark:border-white dark:border-solid dark:border-2 w-[350px] p-4 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mt-3 cursor-pointer text-[#2E1503] "
+            className=" card text-white bg-base-100 border-white border-solid border-2 w-[300px] p-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] mt-3 cursor-pointer "
         >
             <div className="card-body">
                 <div className="flex items-center mb-2">
@@ -80,7 +79,7 @@ const ProposalCard = (props: ProposalCard) => {
                     <p className="text-xs text-right font-bold">{`${calPercentage() === "no vote" ? 0 : 100 - Number(calPercentage())}%`}</p>
                 </div>
                 <progress
-                    className="progress progress-success w-auto dark:bg-slate-950"
+                    className="progress progress-success w-auto bg-slate-950"
                     value={calPercentage() === "no vote" ? 0 : 100 - Number(calPercentage())}
                     max="100"
                 ></progress>
@@ -89,7 +88,7 @@ const ProposalCard = (props: ProposalCard) => {
                     <p className="text-xs text-right font-bold">{`${calPercentage() === "no vote" ? 0 : calPercentage()}%`}</p>
                 </div>
                 <progress
-                    className="progress progress-error w-auto dark:bg-slate-950 text-[#FF5E6C]"
+                    className="progress progress-error w-auto bg-slate-950 text-[#FF5E6C]"
                     value={calPercentage() === "no vote" ? 0 : calPercentage()}
                     max="100"
                 ></progress>

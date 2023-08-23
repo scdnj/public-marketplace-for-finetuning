@@ -1,6 +1,6 @@
 'use client'
 
-import { writeContract, prepareWriteContract, getNetwork, readContract } from 'wagmi/actions'
+import { writeContract, prepareWriteContract, getNetwork } from 'wagmi/actions'
 import { wagmiAbi } from './abi'
 import { zkproof } from './verify'
 import { publicClient, walletClient, account } from './client'
@@ -9,8 +9,8 @@ import { copyFileSync } from 'fs'
 const { buildPoseidon } = require('circomlibjs')
 
 const contractAddress: any = {
-  'Goerli': '0xCEFbaE8c6afEdC5C5e312B34fd8993EfD076d130',
-  'Sepolia': '0x6385Bcd08b7478992f7f0146A114f171701a8de2'
+  'Goerli': '0x6385Bcd08b7478992f7f0146A114f171701a8de2',
+  'Sepolia': process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT
 }
 
 export const registerUser = async (userAddress: string, poseidonHash: string,) => {
@@ -28,6 +28,7 @@ export const registerUser = async (userAddress: string, poseidonHash: string,) =
 
 export const createProposal = async (name: string, endTime: number) => {
   const { chain } = getNetwork()
+  console.log(name, endTime)
   const { request } = await prepareWriteContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
@@ -53,7 +54,7 @@ export const vote = async (credentialHash: string, proposalId: number, accept: b
 export const getResult = async (proposal: bigint) => {
   const { chain } = getNetwork()
 
-  const data = await readContract({
+  const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'getResult',
@@ -65,7 +66,7 @@ export const getResult = async (proposal: bigint) => {
 export const getBlockTime = async () => {
   const { chain } = getNetwork()
 
-  const data = await readContract({
+  const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'getBlockTime',
@@ -75,20 +76,19 @@ export const getBlockTime = async () => {
 
 export const getProposal = async (proposalId: number) => {
   const { chain } = getNetwork()
-  const data = await readContract({
+  const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'proposals',
     args: [BigInt(proposalId)],
   })
-  console.log()
   return data
 }
 
 export const getProposalCount = async () => {
   const { chain } = getNetwork()
 
-  const data = await readContract({
+  const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
     functionName: 'totalProposals',

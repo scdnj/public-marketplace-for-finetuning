@@ -11,14 +11,28 @@ export interface GenerateProofProps {
     onClose: any
 }
 
+const handleProcess2GrayScale = async (imgSrc : any): Promise<any> => {
+    const base64WithoutHeader = imgSrc.replace(/^data:image\/\w+;base64,/, '')
+    const binaryString = atob(base64WithoutHeader);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    
+    return bytes.buffer
+}
+
+
 const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: GenerateProofProps) => {
     const [isCopied, setCopied] = useState(false);
     const [proof, setProof] = useState(null)
     const { address, isConnected } = useAccount()
-
+    const [grayScaleBase64, setGrayScaleBase64] = useState('');
 
     const genProof = async () => {
         setIsLoading(true)
+        const result = await handleProcess2GrayScale(imgSrc)
+        console.log(result)
         await sleep(2000)
         setIsLoading(false)
         setProof(address)

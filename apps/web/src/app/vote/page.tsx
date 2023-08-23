@@ -12,8 +12,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
-import dayjs from "dayjs";
 import ProposalCard from "../../components/Card/ProposalCard";
+import dayjs from "dayjs";
 
 export default function Vote() {
     const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +61,7 @@ export default function Vote() {
             setMounted(false)
         }
     }, [address, isConnected])
-
+    
     useEffect(() => {
         getProposals().then((res) => {
             setProposals(res);
@@ -128,7 +128,7 @@ export default function Vote() {
                             {proposals.map((proposal: any, index: number) => {
                                 const [name, creator, acceptCount, denyCount, endTime] = proposal
                                 let status = "Open"
-                                if (Date.now().valueOf() > new Date(dayjs.unix(Number(proposal.endTime)).format("MM/DD/YYYY HH:mm:ss")).valueOf()) {
+                                if (Date.now().valueOf() > new Date(dayjs.unix(Number(endTime)).format("MM/DD/YYYY HH:mm:ss")).valueOf()) {
                                     status = "Closed"
                                 }
                                 if (proposalStatus === status || proposalStatus === "All" || proposalStatus === "init") {
@@ -137,9 +137,9 @@ export default function Vote() {
                                             proposalId={index}
                                             creator={creator}
                                             proposalBody={name}
-                                            acceptCount={acceptCount}
-                                            denyCount={denyCount}
-                                            endTime={Number(proposal.endTime)}
+                                            acceptCount={Number(acceptCount)}
+                                            denyCount={Number(denyCount)}
+                                            endTime={Number(endTime)}
                                             credentialHash={credentialHash}
                                             status={status}
                                             key={index}

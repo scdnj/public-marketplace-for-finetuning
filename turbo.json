@@ -2,6 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "globalDotEnv": [".env"],
+  "globalEnv": [
+    "NEXT_PUBLIC_PRIVATE_KEY",
+    "NEXT_PUBLIC_INFURA_API_KEY",
+    "NEXT_PUBLIC_SEPOLIA_CONTRACT"
+  ],
   "pipeline": {
     "build": {
       "dotEnv": [".env.production.local", ".env.local", ".env.production", ".env"],
