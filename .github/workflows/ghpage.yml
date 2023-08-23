@@ -36,7 +36,14 @@ jobs:
       
       - name: Install dependencies
         run: pnpm install
-
+      
+      - name: Create Env File
+        run: |
+          touch apps/web/.env.local
+          echo NEXT_PUBLIC_PRIVATE_KEY=${{secrets.NEXT_PUBLIC_PRIVATE_KEY}} >> apps/web/.env.local
+          echo NEXT_PUBLIC_INFURA_API_KEY=${{secrets.NEXT_PUBLIC_INFURA_API_KEY}} >> apps/web/.env.local
+          echo NEXT_PUBLIC_SEPOLIA_CONTRACT=${{secrets.NEXT_PUBLIC_SEPOLIA_CONTRACT}} >> apps/web/.env.local
+      
       - name: Build my App
         run: pnpm run build
 
