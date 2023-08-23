@@ -12,7 +12,7 @@ contract KamuiField is Ownable {
 
     struct Proposal {
         string name;
-        address creater;
+        address creator;
         uint acceptCount;
         uint denyCount;
         uint256 endTime;
@@ -36,19 +36,23 @@ contract KamuiField is Ownable {
 
     mapping(uint256 => Proposal) public proposals;
 
-    mapping(address => uint[1]) public users; 
+    mapping(address => uint[1]) public users;
 
     uint public totalProposals = 0;
-    
-    function createProposals (string calldata name, uint256 continueSec) public{
+
+    function createProposals(string calldata name, uint256 continueSec) public {
         Proposal storage poll = proposals[totalProposals];
-        poll.creater = msg.sender;
+        poll.creator = msg.sender;
         poll.name = name;
         poll.endTime = block.timestamp + continueSec;
         totalProposals += 1;
     }
 
-    function vote(uint256 proposal, bool accept, ProofData memory proofData) public {
+    function vote(
+        uint256 proposal,
+        bool accept,
+        ProofData memory proofData
+    ) public {
         require(verifyProof(proofData), "Verification Failed");
         Voter storage sender = voters[msg.sender][proposal];
         require(block.timestamp < proposals[proposal].endTime, "Vote End");
@@ -59,25 +63,24 @@ contract KamuiField is Ownable {
         emit Voted(msg.sender, proposal, accept);
     }
 
-   function getResult (uint256 proposal) public view returns (bool) {
+    function getResult(uint256 proposal) public view returns (bool) {
         require(block.timestamp > proposals[proposal].endTime, "Vote Not End");
-        if(proposals[proposal].acceptCount > proposals[proposal].denyCount) return true;
+        if (proposals[proposal].acceptCount > proposals[proposal].denyCount)
+            return true;
         else return false;
-   }
+    }
 
-   function getBlockTime () public view returns(uint256) {
+    function getBlockTime() public view returns (uint256) {
         return block.timestamp;
-   }
+    }
 
-   function verifyProof(ProofData memory proofData) public view returns (bool) {
-        return verifier.verifyProof(
-            proofData.a,
-            proofData.b,
-            proofData.c
-        );
-   }
+    function verifyProof(
+        ProofData memory proofData
+    ) public view returns (bool) {
+        return verifier.verifyProof(proofData.a, proofData.b, proofData.c);
+    }
 
-   function registerUser (address user, uint proof) public onlyOwner {
+    function registerUser(address user, uint proof) public onlyOwner {
         users[user] = [proof];
-   }
+    }
 }

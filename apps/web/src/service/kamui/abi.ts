@@ -1,4 +1,4 @@
-[
+export const wagmiAbi = [
   {
     "inputs": [
       {
@@ -134,7 +134,7 @@
       },
       {
         "internalType": "address",
-        "name": "creater",
+        "name": "creator",
         "type": "address"
       },
       {
@@ -344,4 +344,4 @@
     "stateMutability": "view",
     "type": "function"
   }
-]
+] as const
