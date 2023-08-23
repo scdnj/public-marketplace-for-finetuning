@@ -1,3 +1,4 @@
+export * from './lighthouse/lighthouse'
 export const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time))
 
 export const formatAddress = (address: string) => {
