@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers'
+import modelWeight from './circuits.json'
 const { buildPoseidon } = require('circomlibjs')
 const { groth16 } = require('snarkjs')
 
@@ -31,25 +32,17 @@ export async function generateProof(circuitInputs: any, filePathWASM: any, fileP
 }
 const hexToDecimal = (hex: string) => BigInt('0x' + hex).toString()
 
-export async function zkproof(credentialHash: string) {
-  // generate VC hash
-  const filePathWASM: string = '/circuits.wasm'
-  const filePathZKEY: string = '/circuits.zkey'
+export async function zkproof(photo: any) {
+  const filePathWASM: string = 'circuits.wasm'
+  const filePathZKEY: string = 'circuits.zkey'
 
-  // issuer send this hash
-  const poseidon = await buildPoseidon()
-  const inputs = credentialHash
-  const poseidonHash = poseidon.F.toString(poseidon([hexToDecimal(inputs)]))
-  // console.log('poseidon hash:', poseidonHash)
-
-  const circuitInputs = {
-    value: `0x${inputs}`,
-    hash: poseidonHash,
-  }
-  console.log(circuitInputs)
+  // const circuitInputs = {
+  //   in:photo,
+  //   ...modelWeight
+  // }
 
   const proofData = await generateProof(
-    circuitInputs,
+    modelWeight,
     filePathWASM,
     filePathZKEY
   )

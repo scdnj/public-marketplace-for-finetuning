@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { sleep, formatAddress } from 'helper'
 import { useAccount } from 'wagmi'
+import { zkproof } from '../../service/kamui/verify'
 
 export interface GenerateProofProps {
     imgSrc: any
@@ -34,9 +35,10 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: Gener
     const genProof = async () => {
         setIsLoading(true)
         await handleProcess2GrayScale()
-        await sleep(2000)
+        const result = await zkproof(grayScaleBase64)
+        await sleep (2000)
         setIsLoading(false)
-        setProof(address)
+        setProof(result)
     }
 
     const handleCopyProof = () => {
