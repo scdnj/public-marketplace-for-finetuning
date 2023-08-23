@@ -3,7 +3,6 @@
 import WebcamCapture from '../../components/Webcam/WebcamCapture'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 import GenerateProof from '../../components/ZK/GenerateProof'
-import VerifyProof from '../../components/ZK/VerifyProof'
 import CreateProposal from '../../components/Contract/CreateProposal'
 import ProcessLoading from '../../components/Loading/ProcessLoading'
 import KamuiLoading from '../../components/Loading/KamuiLoading'
@@ -24,12 +23,11 @@ export default function Vote() {
     const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false)
     const [isGenProofDialogOpen, setIsGenProofDialogOpen] = useState(false)
     const [isCreateProposalDialogOpen, setIsCreateProposalDialogOpen] = useState(false)
-    const [isVerified, setVerified] = useState(false)
     const [imgSrc, setImgSrc] = useState(null)
     const [copied, setCopied] = useState(false)
     const [proposals, setProposals] = useState<any>([]);
     const [proposalStatus, setProposalStatus] = useState("init")
-    const [credentialHash, setCredentialHash] = useState("");
+    const [proof, setProof] = useState(null)
 
     const openCaptureDialog = async () => {
         setIsCaptureDialogOpen(!isCaptureDialogOpen);
@@ -60,8 +58,9 @@ export default function Vote() {
         } else {
             setMounted(false)
         }
+        setProof(false)
     }, [address, isConnected])
-    
+
     useEffect(() => {
         getProposals().then((res) => {
             setProposals(res);
@@ -78,9 +77,9 @@ export default function Vote() {
                             <p className='font-mono text-black font-bold text-3xl dark:text-white my-4'>
                                 Account Status
                             </p>
-                            {isVerified
-                                ? <div className='badge badge-accent'>Verified</div>
-                                : <div className='badge badge-secondary'>Unverified</div>
+                            {proof
+                                ? <div className='badge badge-accent'>Generated</div>
+                                : <div className='badge badge-secondary'>UnGenerated</div>
                             }
                         </div>
                         <div className='flex flex-row py-2 space-x-11 justify-center'>
@@ -100,15 +99,9 @@ export default function Vote() {
                                     }
                                 </div>
                             </div>
-                            <div className='flex flex-col items-center space-y-5'>
-                                <span className='font-mono'>3. Input Proof to KYC</span>
-                                <div className='bg-gradient-to-r from-[#42275a] to-[#734b6d] card w-[350px] p-4 text-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
-                                    <div className='btn btn-ghost' onClick={openVerifyDialog}>Verify Proof</div>
-                                </div>
-                            </div>
                         </div>
                         <div className='divider'></div>
-                        <div className='container w-full flex flex-row space-x-3 items-center'>
+                        <div className='container w-full flex flex-row space-x-3 items-center mb-8'>
                             <div className="flex w-full justify-start">
                                 <p className='font-mono text-black font-bold text-3xl dark:text-white my-4'>
                                     KAMUI FIELD
@@ -140,15 +133,18 @@ export default function Vote() {
                                             acceptCount={Number(acceptCount)}
                                             denyCount={Number(denyCount)}
                                             endTime={Number(endTime)}
-                                            credentialHash={credentialHash}
+                                            proof={proof}
                                             status={status}
                                             key={index}
+                                            setIsLoading={setIsLoading}
                                         />
                                     );
                                 }
                             })}
                         </div>
                     </div>
+                    {isLoading && <ProcessLoading />}
+                    {isKamuiLoading && <KamuiLoading />}
                     <ProcessDialog
                         isOpen={isCaptureDialogOpen}
                         onClose={() => setIsCaptureDialogOpen(false)}
@@ -161,14 +157,7 @@ export default function Vote() {
                         onClose={() => setIsGenProofDialogOpen(false)}
                         title={'Generate proof'}
                     >
-                        <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setIsLoading={setIsLoading} onClose={() => setIsGenProofDialogOpen(false)} />
-                    </ProcessDialog>
-                    <ProcessDialog
-                        isOpen={isVerifyDialogOpen}
-                        onClose={() => setIsVerifyDialogOpen(false)}
-                        title={'Verify proof'}
-                    >
-                        <VerifyProof setVerified={setVerified} setIsLoading={setIsLoading} onClose={() => setIsVerifyDialogOpen(false)} />
+                        <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setProof={setProof} setIsLoading={setIsLoading} onClose={() => setIsGenProofDialogOpen(false)} />
                     </ProcessDialog>
                     <ProcessDialog
                         isOpen={isCreateProposalDialogOpen}
@@ -177,8 +166,6 @@ export default function Vote() {
                     >
                         <CreateProposal setIsLoading={setIsLoading} onClose={() => setIsCreateProposalDialogOpen(false)} />
                     </ProcessDialog>
-                    {isLoading && <ProcessLoading />}
-                    {isKamuiLoading && <KamuiLoading />}
                     {
                         copied &&
                         <div className='toast toast-top toast-end'>

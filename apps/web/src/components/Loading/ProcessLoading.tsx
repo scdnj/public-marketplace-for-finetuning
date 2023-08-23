@@ -1,6 +1,3 @@
-import Image from 'next/image'
-
-
 const ProcessLoading = (() => {
 
     return (

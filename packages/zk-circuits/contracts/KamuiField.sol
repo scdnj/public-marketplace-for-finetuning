@@ -22,6 +22,7 @@ contract KamuiField is Ownable {
         uint[2] a;
         uint[2][2] b;
         uint[2] c;
+        uint[1] input;
     }
 
     event Voted(address indexed from, uint256 proposal, bool accept);
@@ -77,10 +78,12 @@ contract KamuiField is Ownable {
     function verifyProof(
         ProofData memory proofData
     ) public view returns (bool) {
-        return verifier.verifyProof(proofData.a, proofData.b, proofData.c);
-    }
-
-    function registerUser(address user, uint proof) public onlyOwner {
-        users[user] = [proof];
+        return
+            verifier.verifyProof(
+                proofData.a,
+                proofData.b,
+                proofData.c,
+                proofData.input
+            );
     }
 }

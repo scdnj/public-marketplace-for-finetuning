@@ -1,46 +1,47 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { sleep, formatAddress } from 'helper'
-import { useAccount } from 'wagmi'
+import React, { useState } from 'react';
+import { formatAddress } from 'helper'
+import { zkproof } from '../../service/kamui/verify'
 
 export interface GenerateProofProps {
     imgSrc: any
     handleCopyClick: any
     setIsLoading: any
     onClose: any
+    setProof: any
 }
 
 
-const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: GenerateProofProps) => {
+const GenerateProof = ({ imgSrc, handleCopyClick, setProof, setIsLoading, onClose }: GenerateProofProps) => {
     const [isCopied, setCopied] = useState(false);
-    const [proof, setProof] = useState(null)
-    const { address, isConnected } = useAccount()
+    const [proofToJSON, setProofToJSON] = useState(null);
     const [grayScaleBase64, setGrayScaleBase64] = useState('');
 
-    const handleProcess2GrayScale = async () => {      
+    const handleProcess2GrayScale = async () => {
         const canvas = document.getElementById('a') as HTMLCanvasElement;
         const context = canvas.getContext('2d');
-    
+
         var img = new Image();
         img.src = imgSrc
-        img.onload = function() {
+        img.onload = function () {
             context.filter = 'grayscale(100%)'
-            context.drawImage(img, 0 , 0, 50, 50);
+            context.drawImage(img, 0, 0, 50, 50);
             setGrayScaleBase64(Buffer.from(canvas.toDataURL()).toString('base64'))
-          }
+        }
     }
 
     const genProof = async () => {
         setIsLoading(true)
         await handleProcess2GrayScale()
-        await sleep(2000)
+        const result = await zkproof(grayScaleBase64)
         setIsLoading(false)
-        setProof(address)
+        setProof(result)
+        setProofToJSON(result)
     }
 
     const handleCopyProof = () => {
-        const textToCopy = proof
+        const textToCopy = JSON.stringify(proofToJSON)
         navigator.clipboard.writeText(textToCopy as string).then(() => {
             setCopied(true);
             setTimeout(() => {
@@ -57,10 +58,10 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: Gener
             </div>
             <div>
                 {
-                    proof
-                        ? <div className='flex flex-row space-x-3 items-center'>
-                            <div className='flex flex-row space-x-2 p-4 border-2 border-solid shadow-[0_3px_10px_rgb(0,0,0,0.2)] card'>
-                                <span className='text-white font-mono'>{formatAddress(proof as string)}</span>
+                    proofToJSON
+                        ? <div className='flex flex-col space-y-3 items-center'>
+                            <div className='flex flex-row w-[350px] space-x-2 p-4 border-2 border-solid shadow-[0_3px_10px_rgb(0,0,0,0.2)] card'>
+                                <span className='text-white font-mono'>{formatAddress(JSON.stringify(proofToJSON))}</span>
                                 <label className='swap items-center'>
                                     <input type='checkbox' checked={isCopied} />
                                     <svg className="swap-on w-6 h-6" onClick={() => {
