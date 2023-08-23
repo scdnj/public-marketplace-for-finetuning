@@ -19,30 +19,29 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: Gener
     const { address, isConnected } = useAccount()
     const [grayScaleBase64, setGrayScaleBase64] = useState('');
 
-    const handleProcess2GrayScale = async () => {      
+    const handleProcess2GrayScale = async () => {
         const canvas = document.getElementById('a') as HTMLCanvasElement;
         const context = canvas.getContext('2d');
-    
+
         var img = new Image();
         img.src = imgSrc
-        img.onload = function() {
+        img.onload = function () {
             context.filter = 'grayscale(100%)'
-            context.drawImage(img, 0 , 0, 50, 50);
+            context.drawImage(img, 0, 0, 50, 50);
             setGrayScaleBase64(Buffer.from(canvas.toDataURL()).toString('base64'))
-          }
+        }
     }
 
     const genProof = async () => {
         setIsLoading(true)
         await handleProcess2GrayScale()
         const result = await zkproof(grayScaleBase64)
-        await sleep (2000)
         setIsLoading(false)
         setProof(result)
     }
 
     const handleCopyProof = () => {
-        const textToCopy = proof
+        const textToCopy = JSON.stringify(proof)
         navigator.clipboard.writeText(textToCopy as string).then(() => {
             setCopied(true);
             setTimeout(() => {
@@ -60,9 +59,9 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: Gener
             <div>
                 {
                     proof
-                        ? <div className='flex flex-row space-x-3 items-center'>
-                            <div className='flex flex-row space-x-2 p-4 border-2 border-solid shadow-[0_3px_10px_rgb(0,0,0,0.2)] card'>
-                                <span className='text-white font-mono'>{formatAddress(proof as string)}</span>
+                        ? <div className='flex flex-col space-y-3 items-center'>
+                            <div className='flex flex-row w-[350px] space-x-2 p-4 border-2 border-solid shadow-[0_3px_10px_rgb(0,0,0,0.2)] card'>
+                                <span className='text-white font-mono'>{formatAddress(JSON.stringify(proof))}</span>
                                 <label className='swap items-center'>
                                     <input type='checkbox' checked={isCopied} />
                                     <svg className="swap-on w-6 h-6" onClick={() => {

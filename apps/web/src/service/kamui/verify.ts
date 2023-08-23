@@ -9,7 +9,7 @@ export async function exportSolidity({ proof, publicSignals }: any) {
     .replace(/["[\]\s]/g, "")
     .split(",")
     .map(BigNumber.from);
-  const [a1, a2, b1, b2, b3, b4, c1, c2, ...inputs] = tokens;
+  const [a1, a2, b1, b2, b3, b4, c1, c2, ...input] = tokens;
   const a: [BigNumber, BigNumber] = [a1, a2];
   const b: [[BigNumber, BigNumber], [BigNumber, BigNumber]] = [
     [b1, b2],
@@ -17,7 +17,7 @@ export async function exportSolidity({ proof, publicSignals }: any) {
   ]
   const c: [BigNumber, BigNumber] = [c1, c2]
   return {
-    a, b, c, inputs
+    a, b, c, input
   }
 }
 

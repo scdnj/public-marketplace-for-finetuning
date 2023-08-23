@@ -13,22 +13,8 @@ const contractAddress: any = {
   'Sepolia': process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT
 }
 
-export const registerUser = async (userAddress: string, poseidonHash: string,) => {
-  const { chain } = getNetwork()
-
-  const { request } = await publicClient.simulateContract({
-    account,
-    address: contractAddress[chain!.name],
-    abi: wagmiAbi,
-    functionName: 'registerUser',
-    args: [userAddress, poseidonHash]
-  })
-  await walletClient.writeContract(request)
-}
-
 export const createProposal = async (name: string, endTime: number) => {
   const { chain } = getNetwork()
-  console.log(name, endTime)
   const { request } = await prepareWriteContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
@@ -38,8 +24,7 @@ export const createProposal = async (name: string, endTime: number) => {
   await writeContract(request)
 }
 
-export const vote = async (credentialHash: string, proposalId: number, accept: boolean) => {
-  const proof = await zkproof(credentialHash)
+export const vote = async (proof: any, proposalId: number, accept: boolean) => {
   const { chain } = getNetwork()
 
   const { request } = await prepareWriteContract({

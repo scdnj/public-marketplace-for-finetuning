@@ -61,7 +61,7 @@ export default function Vote() {
             setMounted(false)
         }
     }, [address, isConnected])
-    
+
     useEffect(() => {
         getProposals().then((res) => {
             setProposals(res);
@@ -143,12 +143,15 @@ export default function Vote() {
                                             credentialHash={credentialHash}
                                             status={status}
                                             key={index}
+                                            setIsLoading={setIsLoading}
                                         />
                                     );
                                 }
                             })}
                         </div>
                     </div>
+                    {isLoading && <ProcessLoading />}
+                    {isKamuiLoading && <KamuiLoading />}
                     <ProcessDialog
                         isOpen={isCaptureDialogOpen}
                         onClose={() => setIsCaptureDialogOpen(false)}
@@ -177,8 +180,6 @@ export default function Vote() {
                     >
                         <CreateProposal setIsLoading={setIsLoading} onClose={() => setIsCreateProposalDialogOpen(false)} />
                     </ProcessDialog>
-                    {isLoading && <ProcessLoading />}
-                    {isKamuiLoading && <KamuiLoading />}
                     {
                         copied &&
                         <div className='toast toast-top toast-end'>
