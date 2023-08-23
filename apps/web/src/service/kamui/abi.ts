@@ -157,24 +157,6 @@ export const wagmiAbi = [
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "proof",
-        "type": "uint256"
-      }
-    ],
-    "name": "registerUser",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
@@ -262,6 +244,11 @@ export const wagmiAbi = [
             "internalType": "uint256[2]",
             "name": "c",
             "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256[1]",
+            "name": "input",
+            "type": "uint256[1]"
           }
         ],
         "internalType": "struct KamuiField.ProofData",
@@ -308,6 +295,11 @@ export const wagmiAbi = [
             "internalType": "uint256[2]",
             "name": "c",
             "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256[1]",
+            "name": "input",
+            "type": "uint256[1]"
           }
         ],
         "internalType": "struct KamuiField.ProofData",

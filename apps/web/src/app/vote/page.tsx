@@ -29,7 +29,7 @@ export default function Vote() {
     const [copied, setCopied] = useState(false)
     const [proposals, setProposals] = useState<any>([]);
     const [proposalStatus, setProposalStatus] = useState("init")
-    const [credentialHash, setCredentialHash] = useState("");
+    const [proof, setProof] = useState(null)
 
     const openCaptureDialog = async () => {
         setIsCaptureDialogOpen(!isCaptureDialogOpen);
@@ -78,9 +78,9 @@ export default function Vote() {
                             <p className='font-mono text-black font-bold text-3xl dark:text-white my-4'>
                                 Account Status
                             </p>
-                            {isVerified
-                                ? <div className='badge badge-accent'>Verified</div>
-                                : <div className='badge badge-secondary'>Unverified</div>
+                            {proof
+                                ? <div className='badge badge-accent'>Generated</div>
+                                : <div className='badge badge-secondary'>UnGenerated</div>
                             }
                         </div>
                         <div className='flex flex-row py-2 space-x-11 justify-center'>
@@ -140,7 +140,7 @@ export default function Vote() {
                                             acceptCount={Number(acceptCount)}
                                             denyCount={Number(denyCount)}
                                             endTime={Number(endTime)}
-                                            credentialHash={credentialHash}
+                                            proof={proof}
                                             status={status}
                                             key={index}
                                             setIsLoading={setIsLoading}
@@ -164,7 +164,7 @@ export default function Vote() {
                         onClose={() => setIsGenProofDialogOpen(false)}
                         title={'Generate proof'}
                     >
-                        <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setIsLoading={setIsLoading} onClose={() => setIsGenProofDialogOpen(false)} />
+                        <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setProof={setProof} setIsLoading={setIsLoading} onClose={() => setIsGenProofDialogOpen(false)} />
                     </ProcessDialog>
                     <ProcessDialog
                         isOpen={isVerifyDialogOpen}

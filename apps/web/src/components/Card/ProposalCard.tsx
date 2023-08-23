@@ -1,4 +1,4 @@
-import VoteProposal from '../../components/Contract/VoteProposal'
+import VoteConfirm from '../Contract/VoteConfirm'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 
 import { vote } from "../../service/kamui/contract";
@@ -13,13 +13,14 @@ export interface ProposalCard {
     denyCount: any,
     creator: string,
     endTime: any,
-    credentialHash: string
+    proof: any
     status: string
     setIsLoading: any
 }
 
 const ProposalCard = (props: ProposalCard) => {
-    const [isVotingDialogOpen, setIsVotingDialogOpen] = useState(false)
+    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false)
+    const [action, setAction] = useState(null)
 
     function calPercentage(): number | string {
         if (props.denyCount === 0 && props.acceptCount === 0)
@@ -39,8 +40,16 @@ const ProposalCard = (props: ProposalCard) => {
         return Number(Number(num.toFixed(3)).toFixed(2));
     }
 
-    const handleVoteClick = () => {
-        setIsVotingDialogOpen(true)
+    async function handleAccept() {
+        setAction(true)
+        setIsConfirmDialogOpen(true)
+    }
+
+    async function handleDeny() {
+        setAction(false)
+        setIsConfirmDialogOpen(true)
+
+
     }
 
     return (
@@ -76,31 +85,46 @@ const ProposalCard = (props: ProposalCard) => {
                     max="100"
                 ></progress>
                 <div className="flex justify-center mt-7">
-                    {props.status === "Closed" ? (
-                        <>
-                            <button className="btn btn-outline btn-ghost w-20 border-2"
+                    {props.status === "Closed" || !props.proof ? (
+                        <div className='flex flex-row space-x-12'>
+
+                            <button
+                                className="btn btn-outline btn-ghost w-20 border-2"
                                 onClick={(e) => { e.stopPropagation() }}
                             >
-                                Vote
+                                Accept
                             </button>
-                        </>
-                    ) : (
-                        <>
-                            <button className="btn btn-outline btn-info w-20 border-2"
-                                onClick={handleVoteClick}
+                            <button
+                                className="btn btn-outline btn-ghost w-20 border-2"
+                                onClick={(e) => { e.stopPropagation() }}
                             >
-                                Vote
+                                Deny
                             </button>
-                        </>
+                        </div>
+                    ) : (
+                        <div className='flex flex-row space-x-12'>
+                            <button
+                                className="btn btn-outline btn-success w-20 border-2"
+                                onClick={handleAccept}
+                            >
+                                Accept
+                            </button>
+                            <button
+                                className="btn btn-outline btn-error w-20 border-2"
+                                onClick={handleDeny}
+                            >
+                                Deny
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>
             <ProcessDialog
-                isOpen={isVotingDialogOpen}
-                onClose={() => setIsVotingDialogOpen(false)}
+                isOpen={isConfirmDialogOpen}
+                onClose={() => setIsConfirmDialogOpen(false)}
                 title={props.proposalBody}
             >
-                <VoteProposal setIsLoading={props.setIsLoading} proposalId={props.proposalId} onClose={() => setIsVotingDialogOpen(false)} />
+                <VoteConfirm setIsLoading={props.setIsLoading} proposalId={props.proposalId} action={action} proof={props.proof} onClose={() => setIsConfirmDialogOpen(false)} />
             </ProcessDialog>
         </div>
     );
