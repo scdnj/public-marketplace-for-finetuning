@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { sleep, formatAddress } from 'helper'
 import { useAccount } from 'wagmi'
 
@@ -11,17 +11,6 @@ export interface GenerateProofProps {
     onClose: any
 }
 
-const handleProcess2GrayScale = async (imgSrc : any): Promise<any> => {
-    const base64WithoutHeader = imgSrc.replace(/^data:image\/\w+;base64,/, '')
-    const binaryString = atob(base64WithoutHeader);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    
-    return bytes.buffer
-}
-
 
 const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: GenerateProofProps) => {
     const [isCopied, setCopied] = useState(false);
@@ -29,10 +18,22 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: Gener
     const { address, isConnected } = useAccount()
     const [grayScaleBase64, setGrayScaleBase64] = useState('');
 
+    const handleProcess2GrayScale = async () => {      
+        const canvas = document.getElementById('a') as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+    
+        var img = new Image();
+        img.src = imgSrc
+        img.onload = function() {
+            context.filter = 'grayscale(100%)'
+            context.drawImage(img, 0 , 0, 50, 50);
+            setGrayScaleBase64(Buffer.from(canvas.toDataURL()).toString('base64'))
+          }
+    }
+
     const genProof = async () => {
         setIsLoading(true)
-        const result = await handleProcess2GrayScale(imgSrc)
-        console.log(result)
+        await handleProcess2GrayScale()
         await sleep(2000)
         setIsLoading(false)
         setProof(address)
@@ -78,6 +79,7 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setIsLoading, onClose }: Gener
                         : <div className="btn" onClick={genProof} >Generate</div>
                 }
             </div>
+            <canvas id="a" width="50" height="50" style={{ display: 'none' }} ></canvas>
         </div>
     );
 }
