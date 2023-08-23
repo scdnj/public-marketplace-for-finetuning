@@ -36,13 +36,13 @@ export async function zkproof(photo: any) {
   const filePathWASM: string = 'circuits.wasm'
   const filePathZKEY: string = 'circuits.zkey'
 
-  // const circuitInputs = {
-  //   in:photo,
-  //   ...modelWeight
-  // }
+  const circuitInputs = {
+    in: photo,
+    ...modelWeight
+  }
 
   const proofData = await generateProof(
-    modelWeight,
+    circuitInputs,
     filePathWASM,
     filePathZKEY
   )

@@ -1,9 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { sleep, formatAddress } from 'helper'
-import { useAccount } from 'wagmi'
-import { ProposalCard } from '../Card/ProposalCard'
+import React, { useState } from 'react'
 import { vote } from "../../service/kamui/contract";
 
 

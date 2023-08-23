@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { sleep, formatAddress } from 'helper'
-import { useAccount } from 'wagmi'
+import React, { useState } from 'react';
+import { formatAddress } from 'helper'
 import { zkproof } from '../../service/kamui/verify'
 
 export interface GenerateProofProps {

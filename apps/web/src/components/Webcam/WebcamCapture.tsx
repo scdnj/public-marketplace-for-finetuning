@@ -1,15 +1,14 @@
 'use client'
 
 import Webcam from "react-webcam";
-import React, { useRef, useState, useCallback, useEffect } from 'react';
-import {sleep} from 'helper'
+import React, { useRef, useState, useCallback } from 'react';
 
 export interface WebcamCaptureProps {
     setImgSrc: any
     onClose: any
 }
 
-const WebcamCapture = ({setImgSrc, onClose}: WebcamCaptureProps) => {
+const WebcamCapture = ({ setImgSrc, onClose }: WebcamCaptureProps) => {
     const webcamRef = useRef<Webcam>(null)
     const [imgSrc, setWebcamImg] = useState(null)
 
@@ -28,21 +27,21 @@ const WebcamCapture = ({setImgSrc, onClose}: WebcamCaptureProps) => {
         <div className="flex flex-col items-center ">
             <div className="pb-4">
                 {
-                    imgSrc 
-                    ? <img src={imgSrc} alt="webcam"/>
-                    : <Webcam height={500} width={500} ref={webcamRef} mirrored={true} />
+                    imgSrc
+                        ? <img src={imgSrc} alt="webcam" />
+                        : <Webcam height={500} width={500} ref={webcamRef} mirrored={true} />
                 }
             </div>
             <div className="flex flex-row space-x-3">
                 {
-                    imgSrc 
-                    ? <div className="btn" onClick={retryCapture} >Recapture</div>
-                    : <div className="btn" onClick={capture} >Capture</div>
+                    imgSrc
+                        ? <div className="btn" onClick={retryCapture} >Recapture</div>
+                        : <div className="btn" onClick={capture} >Capture</div>
                 }
                 {
                     imgSrc
-                    ? <div className="btn" onClick={onClose} >OK</div>
-                    : null
+                        ? <div className="btn" onClick={onClose} >OK</div>
+                        : null
                 }
             </div>
         </div>
