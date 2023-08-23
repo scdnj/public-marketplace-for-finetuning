@@ -1,0 +1,19 @@
+{ parameter (or (unit %access) (int %vote)) ;
+  storage (pair (int %no) (int %yes)) ;
+  code { UNPAIR ;
+         IF_LEFT
+           { DROP }
+           { DUP 2 ;
+             PUSH int 1 ;
+             DUP 3 ;
+             COMPARE ;
+             EQ ;
+             IF { SWAP ; DROP ; PUSH int 1 ; DIG 2 ; CDR ; ADD ; UPDATE 2 }
+                { PUSH int 2 ;
+                  DIG 2 ;
+                  COMPARE ;
+                  EQ ;
+                  IF { PUSH int 1 ; DIG 2 ; CAR ; ADD ; UPDATE 1 } { SWAP ; DROP } } } ;
+         NIL operation ;
+         PAIR } }
+
