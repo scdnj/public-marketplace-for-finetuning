@@ -3,7 +3,7 @@
 import { writeContract, prepareWriteContract, getNetwork } from 'wagmi/actions'
 import { wagmiAbi } from './abi'
 import { zkproof } from './verify'
-import { publicClient, walletClient, account } from './client'
+import { sepoliaClient, goerliClient, account } from './client'
 import { copyFileSync } from 'fs'
 
 const { buildPoseidon } = require('circomlibjs')
@@ -11,6 +11,11 @@ const { buildPoseidon } = require('circomlibjs')
 const contractAddress: any = {
   'Goerli': '0x6385Bcd08b7478992f7f0146A114f171701a8de2',
   'Sepolia': process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT
+}
+
+const publicClients: any = {
+  'Goerli': goerliClient,
+  'Sepolia': sepoliaClient,
 }
 
 export const createProposal = async (name: string, endTime: number) => {
@@ -38,7 +43,7 @@ export const vote = async (proof: any, proposalId: number, accept: boolean) => {
 
 export const getResult = async (proposal: bigint) => {
   const { chain } = getNetwork()
-
+  const publicClient = publicClients[chain!.name]
   const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
@@ -50,7 +55,7 @@ export const getResult = async (proposal: bigint) => {
 
 export const getBlockTime = async () => {
   const { chain } = getNetwork()
-
+  const publicClient = publicClients[chain!.name]
   const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
@@ -61,6 +66,7 @@ export const getBlockTime = async () => {
 
 export const getProposal = async (proposalId: number) => {
   const { chain } = getNetwork()
+  const publicClient = publicClients[chain!.name]
   const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
@@ -72,7 +78,7 @@ export const getProposal = async (proposalId: number) => {
 
 export const getProposalCount = async () => {
   const { chain } = getNetwork()
-
+  const publicClient = publicClients[chain!.name]
   const data = await publicClient.readContract({
     address: contractAddress[chain!.name],
     abi: wagmiAbi,
