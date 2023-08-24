@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
+    "compile": "hardhat compile",
     "deploy": "hardhat deploy:kamui --network sepolia --verify",
     "deploy:zk": "hardhat deploy:verifier --network sepolia --verify",
+    "deploy:wormsrc": "hardhat deploy:wormsrc --network sepolia --verify",
+    "deploy:wormdst": "hardhat deploy:wormdst --network goerli --verify",
     "circom:dev": "hardhat circom --deterministic --debug --verbose",
     "zk": "ts-node scripts/zk/verify.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
