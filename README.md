@@ -2,50 +2,40 @@
 
 This is an official starter Turborepo.
 
-## Using this example
+## 
+```mermaid
+sequenceDiagram
+    actor User
+    participant Web
+    participant I as LightHouse IPFS
+    participant Z as Zero Knowledge Model
+    participant S as Sepolia
+    participant T as Tezos
+    participant W as Wormhole
+    %% Webcam
+    User ->> Web: Open WebCam to Capture Face
+    
+    Web ->> I: Choose Model Standard from IPFS
+    activate I
+    I -->> Web: Return Model Weight To Web 
+    deactivate I
 
-Run the following command:
+    %% generate proof
+    User ->> Web: Send Photo to model
+    Web ->> Z: Accept Send Photo and Model Weight to WASM
+    activate Z
+    Z -->> Web: WASM generate proof
+    deactivate Z
 
-```sh
-npx create-turbo@latest -e with-tailwind
+    %% Use Proof to Verify
+    Web ->> S: Use Proof to KYC on chain
+    S ->> S: Verify ZK Proof on chain
+    S ->> W: Send Access to Target Chain
+    W ->> T: Invoke Access to Destination Chain 
+    S -->> Web: Get Vote Access to User
+    %% Vote
+    User ->> Web: Choose Proposal to Vote
+    Web ->> S: Vote yes or no
+    S ->> W: Add Vote to Dst Chain
+    S -->> Web: return vote result to user
 ```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Building packages/ui
-
-This example is setup to build `packages/ui` and output the transpiled source and compiled styles to `dist/`. This was chosen to make sharing one `tailwind.config.js` as easy as possible, and to ensure only the CSS that is used by the current application and its dependencies is generated.
-
-Another option is to consume `packages/ui` directly from source without building. If using this option, you will need to update your `tailwind.config.js` to be aware of your package locations, so it can find all usages of the `tailwindcss` class names.
-
-For example, in [tailwind.config.js](packages/tailwind-config/tailwind.config.js):
-
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/**/*.{js,ts,jsx,tsx}",
-  ],
-```
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
