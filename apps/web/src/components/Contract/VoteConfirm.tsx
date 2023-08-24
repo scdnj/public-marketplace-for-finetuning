@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { vote } from "../../service/kamui/contract";
+import { voteProposal } from 'tezos-interact'
 
 
 interface VoteContent {
@@ -18,6 +19,7 @@ const VoteProposal = ({ proposalId, setIsLoading, action, proof, onClose }: Vote
     const handleVote = async () => {
         setIsLoading(true)
         await vote(proof, proposalId, action);
+        await voteProposal(action ? 1 : 2)
         setIsLoading(false)
         setProcess(true)
     }

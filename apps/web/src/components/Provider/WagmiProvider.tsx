@@ -6,8 +6,8 @@ import { ConnectKitProvider, getDefaultConfig } from "connectkit"
 import { publicProvider } from 'wagmi/providers/public'
 
 const defaultChains: Chain[] = [
-    goerli,
     sepolia,
+    goerli,
     polygonMumbai
 ];
 

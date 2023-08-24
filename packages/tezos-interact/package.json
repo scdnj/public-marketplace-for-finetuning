@@ -1,8 +1,12 @@
 {
   "name": "tezos-interact",
   "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "description": "",
-  "main": "index.js",
+  "export": {
+    ".": "./dist"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format cjs --dts",
     "build:dev": "npm run build -- --watch",

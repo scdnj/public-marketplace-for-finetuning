@@ -117,6 +117,9 @@ importers:
       snarkjs:
         specifier: ^0.7.0
         version: 0.7.0
+      tezos-interact:
+        specifier: workspace:*
+        version: link:../../packages/tezos-interact
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
