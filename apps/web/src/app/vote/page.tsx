@@ -4,8 +4,6 @@ import WebcamCapture from '../../components/Webcam/WebcamCapture'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 import GenerateProof from '../../components/ZK/GenerateProof'
 import CreateProposal from '../../components/Contract/CreateProposal'
-import ProcessLoading from '../../components/Loading/ProcessLoading'
-import KamuiLoading from '../../components/Loading/KamuiLoading'
 import { getProposals } from '../../service/kamui/contract'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -14,22 +12,25 @@ import { useAccount } from 'wagmi'
 import ProposalCard from "../../components/Card/ProposalCard";
 import dayjs from "dayjs";
 import { ConnectKitButton } from 'connectkit'
-
+import VoteConfirm from '../../components/Contract/VoteConfirm'
 
 export default function Vote() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isKamuiLoading, setIsKamuiLoading] = useState(false);
     const { address, isConnected } = useAccount()
     const [mounted, setMounted] = useState(false)
     const [isCaptureDialogOpen, setIsCaptureDialogOpen] = useState(false)
     const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false)
     const [isGenProofDialogOpen, setIsGenProofDialogOpen] = useState(false)
     const [isCreateProposalDialogOpen, setIsCreateProposalDialogOpen] = useState(false)
+    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false)
     const [imgSrc, setImgSrc] = useState(null)
     const [copied, setCopied] = useState(false)
     const [proposals, setProposals] = useState<any>([]);
     const [proposalStatus, setProposalStatus] = useState("init")
     const [proof, setProof] = useState(null)
+    
+    const [selectedAction, setAction] = useState(null)
+    const [selectedProposalId, setProposalId] = useState(null)
+    const [selectedProposalContent, setProposalsContent] = useState(null)
 
     const openCaptureDialog = async () => {
         setIsCaptureDialogOpen(!isCaptureDialogOpen);
@@ -142,7 +143,10 @@ export default function Vote() {
                                                     proof={proof}
                                                     status={status}
                                                     key={index}
-                                                    setIsLoading={setIsLoading}
+                                                    setIsConfirmDialogOpen={setIsConfirmDialogOpen}
+                                                    setAction={setAction}
+                                                    setProposalId={setProposalId}
+                                                    setProposalsContent={setProposalsContent}
                                                 />
                                             );
                                         }
@@ -162,8 +166,6 @@ export default function Vote() {
                              </div>
                         }
                     </div>
-                    {isLoading && <ProcessLoading />}
-                    {isKamuiLoading && <KamuiLoading />}
                     <ProcessDialog
                         isOpen={isCaptureDialogOpen}
                         onClose={() => setIsCaptureDialogOpen(false)}
@@ -176,14 +178,21 @@ export default function Vote() {
                         onClose={() => setIsGenProofDialogOpen(false)}
                         title={'Generate proof'}
                     >
-                        <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setProof={setProof} setIsLoading={setIsLoading} onClose={() => setIsGenProofDialogOpen(false)} />
+                        <GenerateProof imgSrc={imgSrc} handleCopyClick={handleCopyClick} setProof={setProof} onClose={() => setIsGenProofDialogOpen(false)} />
                     </ProcessDialog>
                     <ProcessDialog
                         isOpen={isCreateProposalDialogOpen}
                         onClose={() => setIsCreateProposalDialogOpen(false)}
                         title={'New Proposal'}
                     >
-                        <CreateProposal setIsLoading={setIsLoading} onClose={() => setIsCreateProposalDialogOpen(false)} />
+                        <CreateProposal onClose={() => setIsCreateProposalDialogOpen(false)} />
+                    </ProcessDialog>
+                    <ProcessDialog
+                        isOpen={isConfirmDialogOpen}
+                        onClose={() => setIsConfirmDialogOpen(false)}
+                        title={selectedProposalContent}
+                    >
+                        <VoteConfirm proposalId={selectedProposalId} action={selectedAction} proof={proof} onClose={() => setIsConfirmDialogOpen(false)} />
                     </ProcessDialog>
                     {
                         copied &&

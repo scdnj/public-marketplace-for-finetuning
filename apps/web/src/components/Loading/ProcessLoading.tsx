@@ -1,7 +1,7 @@
 const ProcessLoading = (() => {
 
     return (
-        <div className='flex flex-col items-center justify-center space-y-4'>
+        <div className='flex flex-col items-center justify-center space-y-4 overlay'>
             <span className="loading loading-spinner loading-lg w-100"></span>
         </div>
     )
