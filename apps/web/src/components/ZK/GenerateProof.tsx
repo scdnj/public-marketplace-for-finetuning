@@ -3,19 +3,20 @@
 import React, { useState } from 'react';
 import { formatAddress } from 'helper'
 import { zkproof } from '../../service/kamui/verify'
+import ProcessLoading from '../../components/Loading/ProcessLoading'
 
 export interface GenerateProofProps {
     imgSrc: any
     handleCopyClick: any
-    setIsLoading: any
     onClose: any
     setProof: any
 }
 
 
-const GenerateProof = ({ imgSrc, handleCopyClick, setProof, setIsLoading, onClose }: GenerateProofProps) => {
+const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateProofProps) => {
     const [isCopied, setCopied] = useState(false);
     const [proofToJSON, setProofToJSON] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [grayScaleBase64, setGrayScaleBase64] = useState('');
 
     const handleProcess2GrayScale = async () => {
@@ -77,7 +78,13 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, setIsLoading, onClos
                             </div>
                             <div className="btn" onClick={onClose} >OK</div>
                         </div>
-                        : <div className="btn" onClick={genProof} >Generate</div>
+                        : <>
+                        {
+                            isLoading
+                            ? <ProcessLoading />
+                            : <div className="btn" onClick={genProof} >Generate</div>
+                        }
+                        </>
                 }
             </div>
             <canvas id="a" width="50" height="50" style={{ display: 'none' }} ></canvas>

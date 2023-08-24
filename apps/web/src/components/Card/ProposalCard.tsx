@@ -1,4 +1,3 @@
-import VoteConfirm from '../Contract/VoteConfirm'
 import ProcessDialog from '../../components/Dialog/ProcessDialog'
 
 import { vote } from "../../service/kamui/contract";
@@ -13,15 +12,15 @@ export interface ProposalCard {
     denyCount: any,
     creator: string,
     endTime: any,
-    proof: any
-    status: string
-    setIsLoading: any
+    proof: any,
+    status: string,
+    setIsConfirmDialogOpen: any,
+    setAction: any,
+    setProposalId: any,
+    setProposalsContent: any
 }
 
 const ProposalCard = (props: ProposalCard) => {
-    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false)
-    const [action, setAction] = useState(null)
-
     function calPercentage(): number | string {
         if (props.denyCount === 0 && props.acceptCount === 0)
             return "no vote";
@@ -41,15 +40,17 @@ const ProposalCard = (props: ProposalCard) => {
     }
 
     async function handleAccept() {
-        setAction(true)
-        setIsConfirmDialogOpen(true)
+        props.setAction(true)
+        props.setProposalId(props.proposalId)
+        props.setProposalsContent(props.proposalBody)
+        props.setIsConfirmDialogOpen(true)
     }
 
     async function handleDeny() {
-        setAction(false)
-        setIsConfirmDialogOpen(true)
-
-
+        props.setAction(false)
+        props.setProposalId(props.proposalId)
+        props.setProposalsContent(props.proposalBody)
+        props.setIsConfirmDialogOpen(true)
     }
 
     return (
@@ -119,13 +120,6 @@ const ProposalCard = (props: ProposalCard) => {
                     )}
                 </div>
             </div>
-            <ProcessDialog
-                isOpen={isConfirmDialogOpen}
-                onClose={() => setIsConfirmDialogOpen(false)}
-                title={props.proposalBody}
-            >
-                <VoteConfirm setIsLoading={props.setIsLoading} proposalId={props.proposalId} action={action} proof={props.proof} onClose={() => setIsConfirmDialogOpen(false)} />
-            </ProcessDialog>
         </div>
     );
 }

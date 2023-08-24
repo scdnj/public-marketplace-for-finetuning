@@ -2,16 +2,17 @@ import { createProposal } from '../../service/kamui/contract'
 import { useState } from 'react';
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { sleep } from 'helper'
+import ProcessLoading from '../../components/Loading/ProcessLoading'
 
 export interface CreateProposalProps {
-    setIsLoading: any
     onClose: any
 }
 
-const CreateProposal = ({ setIsLoading, onClose }: CreateProposalProps) => {
+const CreateProposal = ({ onClose }: CreateProposalProps) => {
     const [open, setOpen] = useState(false);
     const [endTime, setEndTime] = useState<number>(0);
     const [content, setContent] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
     const [isFinished, setFinished] = useState(false)
 
     const handleEndTimeChange = (event: any) => {
@@ -63,7 +64,11 @@ const CreateProposal = ({ setIsLoading, onClose }: CreateProposalProps) => {
                         }}
                     />
                     <input type="text" placeholder="Content" className="input input-bordered w-[350px] max-w-xs" onChange={(e) => setContent(e.target.value)} />
-                    <div className="btn" onClick={handleCreate}>Create</div>
+                    {
+                        isLoading
+                        ? <ProcessLoading />
+                        : <div className="btn" onClick={handleCreate}>Create</div>
+                    }
                 </>
             }
         </div>
