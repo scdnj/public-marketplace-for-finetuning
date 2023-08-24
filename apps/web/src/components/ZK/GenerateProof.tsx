@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { formatAddress } from 'helper'
-import { zkproof } from '../../service/kamui/verify'
+import { zkproof, getModelWeight } from '../../service/kamui/verify'
 import ProcessLoading from '../../components/Loading/ProcessLoading'
 
 export interface GenerateProofProps {
@@ -17,6 +17,9 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
     const [isCopied, setCopied] = useState(false);
     const [proofToJSON, setProofToJSON] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState('')
+    const [loadingSecondaryText, setLoadingSecondaryText] = useState(null)
+    const ipfsKey = 'QmedkX5nTPfDZxF5epTXTA4pha61xX3uzVi31EgJdcQ7Jw'
 
     const handleProcess2GrayScale = async () => {
         return new Promise((resolve, reject) => {
@@ -49,7 +52,12 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
     const genProof = async () => {
         setIsLoading(true)
         const grayScaleBuffer = await handleProcess2GrayScale()
-        const result = await zkproof(grayScaleBuffer)
+        setLoadingText(`Downloading model weight`)
+        setLoadingSecondaryText(ipfsKey)
+        const modelWeight = await getModelWeight(ipfsKey)
+        setLoadingSecondaryText(null)
+        setLoadingText(`Generating Proof`)
+        const result = await zkproof(grayScaleBuffer, modelWeight)
         setIsLoading(false)
         setProof(result)
         setProofToJSON(result)
@@ -95,7 +103,11 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
                         : <>
                         {
                             isLoading
-                            ? <ProcessLoading />
+                            ? <div className='flex flex-col items-center space-y-3'>
+                                <span className='font-mono'>{loadingText}</span>
+                                { loadingSecondaryText ? <span className='font-mono'>{loadingSecondaryText}</span> : null}
+                                    <ProcessLoading />
+                                </div>
                             : <div className="btn" onClick={genProof} >Generate</div>
                         }
                         </>

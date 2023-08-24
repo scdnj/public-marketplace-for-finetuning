@@ -31,8 +31,8 @@ export async function generateProof(circuitInputs: any, filePathWASM: any, fileP
 }
 const hexToDecimal = (hex: string) => BigInt('0x' + hex).toString()
 
-export const getModelWeight = async () => {
-  const modelUrl = 'https://gateway.lighthouse.storage/ipfs/QmedkX5nTPfDZxF5epTXTA4pha61xX3uzVi31EgJdcQ7Jw'
+export const getModelWeight = async (key: string) => {
+  const modelUrl = `https://gateway.lighthouse.storage/ipfs/${key}`
   try {
     const response = await fetch(modelUrl);
 
@@ -48,11 +48,9 @@ export const getModelWeight = async () => {
   }
 }
 
-export async function zkproof(photo: any) {
+export async function zkproof(photo: any, modelWeight: any) {
   const filePathWASM: string = 'circuits.wasm'
   const filePathZKEY: string = 'circuits.zkey'
-
-  const modelWeight = await getModelWeight()
   
   const circuitInputs = {
     in: photo,
