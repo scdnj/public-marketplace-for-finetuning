@@ -2,10 +2,22 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import "./interface/IWormhole.sol";
 import "./interface/ICircuitsVerifier.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract KamuiField is Ownable {
+contract WormKamuiSrc is Ownable {
+    struct MyMessage {
+        address recipient;
+        string message;
+    }
+
+    // sepoloa core bridge: https://book.wormhole.com/reference/contracts.html#testnet
+    address private whAddr = 0x4a8bc80Ed5a4067f1CCf107057b8270E0cC11A78;
+    IWormhole public immutable wormhole = IWormhole(whAddr);
+
+    uint256 public lastMessageSequence;
+
     struct Voter {
         bool voted;
     }
@@ -22,6 +34,7 @@ contract KamuiField is Ownable {
         uint[2] a;
         uint[2][2] b;
         uint[2] c;
+        uint[1] input;
     }
 
     event Voted(address indexed from, uint256 proposal, bool accept);
@@ -77,10 +90,31 @@ contract KamuiField is Ownable {
     function verifyProof(
         ProofData memory proofData
     ) public view returns (bool) {
-        return verifier.verifyProof(proofData.a, proofData.b, proofData.c);
+        return
+            verifier.verifyProof(
+                proofData.a,
+                proofData.b,
+                proofData.c,
+                proofData.input
+            );
     }
 
-    function registerUser(address user, uint proof) public onlyOwner {
-        users[user] = [proof];
+    // wormhole
+    function getMessageForAddress(address recipient, string calldata message) external pure returns (bytes memory) {
+        return abi.encode(MyMessage(recipient, message));
+    }
+
+    function sendKYCMessage(
+        bytes memory fullMessage,
+        ProofData memory proofData
+    ) public payable {
+        require(verifyProof(proofData), "Verification Failed");
+        lastMessageSequence = wormhole.publishMessage{
+            value: wormhole.messageFee()
+        }(1, fullMessage, 200);
+    }
+
+    function emitterAddress() public view returns (bytes32) {
+        return bytes32(uint256(uint160(address(this))));
     }
 }
