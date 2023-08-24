@@ -17,25 +17,39 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
     const [isCopied, setCopied] = useState(false);
     const [proofToJSON, setProofToJSON] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [grayScaleBase64, setGrayScaleBase64] = useState('');
 
     const handleProcess2GrayScale = async () => {
-        const canvas = document.getElementById('a') as HTMLCanvasElement;
-        const context = canvas.getContext('2d');
-
-        var img = new Image();
-        img.src = imgSrc
-        img.onload = function () {
-            context.filter = 'grayscale(100%)'
-            context.drawImage(img, 0, 0, 50, 50);
-            setGrayScaleBase64(Buffer.from(canvas.toDataURL()).toString('base64'))
-        }
+        return new Promise((resolve, reject) => {
+            const canvas = document.getElementById('a') as HTMLCanvasElement;
+            const context = canvas.getContext('2d');
+    
+            var img = new Image();
+            img.src = imgSrc
+            img.onload = function () {
+                context.filter = 'grayscale(100%)'
+                context.drawImage(img, 0, 0, 50, 50);
+                const input8Array = Buffer.from(canvas.toDataURL())
+                const width = 50;
+                const height = 50;
+                const outputArray = [];
+    
+                for (let y = 0; y < height; y++) {
+                const row = [];
+                for (let x = 0; x < width; x++) {
+                    const index = y * width + x;
+                    row.push([input8Array[index]]);
+                }
+                    outputArray.push(row);
+                }
+                resolve(outputArray)
+           }  
+        })
     }
 
     const genProof = async () => {
         setIsLoading(true)
-        await handleProcess2GrayScale()
-        const result = await zkproof(grayScaleBase64)
+        const grayScaleBuffer = await handleProcess2GrayScale()
+        const result = await zkproof(grayScaleBuffer)
         setIsLoading(false)
         setProof(result)
         setProofToJSON(result)

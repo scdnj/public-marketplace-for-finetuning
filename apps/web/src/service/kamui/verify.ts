@@ -1,5 +1,4 @@
 import { BigNumber } from 'ethers'
-import modelWeight from './circuits.json'
 const { buildPoseidon } = require('circomlibjs')
 const { groth16 } = require('snarkjs')
 
@@ -32,10 +31,29 @@ export async function generateProof(circuitInputs: any, filePathWASM: any, fileP
 }
 const hexToDecimal = (hex: string) => BigInt('0x' + hex).toString()
 
+export const getModelWeight = async () => {
+  const modelUrl = 'https://gateway.lighthouse.storage/ipfs/QmedkX5nTPfDZxF5epTXTA4pha61xX3uzVi31EgJdcQ7Jw'
+  try {
+    const response = await fetch(modelUrl);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.error('Error fetching model weight:', error);
+    return null;
+  }
+}
+
 export async function zkproof(photo: any) {
   const filePathWASM: string = 'circuits.wasm'
   const filePathZKEY: string = 'circuits.zkey'
 
+  const modelWeight = await getModelWeight()
+  
   const circuitInputs = {
     in: photo,
     ...modelWeight
