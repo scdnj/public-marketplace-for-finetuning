@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { formatAddress } from 'helper'
+import { formatAddress, sleep } from 'helper'
 import { zkproof, getModelWeight } from '../../service/kamui/verify'
 import ProcessLoading from '../../components/Loading/ProcessLoading'
 
@@ -55,6 +55,7 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
         setLoadingText(`Downloading model weight`)
         setLoadingSecondaryText(ipfsKey)
         const modelWeight = await getModelWeight(ipfsKey)
+        await sleep (2000)
         setLoadingSecondaryText(null)
         setLoadingText(`Generating Proof`)
         const result = await zkproof(grayScaleBuffer, modelWeight)
