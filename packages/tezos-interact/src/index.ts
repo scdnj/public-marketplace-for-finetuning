@@ -34,6 +34,7 @@ export const voteProposal = async (proposalNumber: number, vote: number) =>  {
   })
   .then((hash) => {
     console.log(`Vote finished: https://better-call.dev/ghostnet/opg/${hash}`)
+    return hash
   })
   .catch((error) => {
     console.log(`Vote error: ${JSON.stringify(error, null, 2)}`)
