@@ -17,7 +17,7 @@ interface VoteContent {
 const VoteProposal = ({ proposalId, action, proof, onClose }: VoteContent) => {
     const [isProcess, setProcess] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
-    const [tzResultHash, setResultHash] = useState('')
+    const [tzResultHash, setResultHash] = useState(null)
 
     const handleVote = async () => {
         try {
