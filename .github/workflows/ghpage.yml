@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main # The branch the action should deploy from.
+    paths:
+      - 'apps/web/**' # The folder the action should deploy.
 
 permissions:
   contents: read
