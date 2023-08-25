@@ -1,8 +1,8 @@
-import { voteProposal, accessProposal } from './index';
+import { voteProposal, resetProposal } from './index';
 
 const main = async () => {
-  await voteProposal(1)
-  await accessProposal()
+  await voteProposal(1, 1)
+  await resetProposal(1)
 }
 
 main()

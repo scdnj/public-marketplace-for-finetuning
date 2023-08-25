@@ -6,10 +6,11 @@ type storage = {
 type parameter =
 | ["Vote", int]
 | ["Access"]
+| ["Reset"]
 
 type return_ = [list <operation>, storage];
 
-/* Two entrypoints */
+/* entrypoints */
 const voteProposal = ([store, vote] : [storage, int]) : storage => {
   
   let temp_store = store;
@@ -30,14 +31,25 @@ const accessProposal = (store: storage) : storage => {
   return result;
 }
 
+const resetProposal = (store: storage) : storage => {
+  let temp_store = store;
+
+  temp_store.yes = 0;
+  temp_store.no = 0;
+
+  const result = temp_store;
+  return result;
+}
+
 /* Main access point that dispatches to the entrypoints according to
    the smart contract parameter. */
 const main = ([action, store] : [parameter, storage]) : return_ => {
  return [
-   (list([]) as list <operation>),    // No operations
+   (list([]) as list <operation>),
    (match (action, {
     Vote: (n: int) => voteProposal([store, n]),
     Access: () => accessProposal(store),
+    Reset: () => resetProposal(store),
     }))
   ]
 };
