@@ -23,11 +23,15 @@ const CreateProposal = ({ onClose }: CreateProposalProps) => {
     };
 
     const handleCreate = async () => {
-        setIsLoading(true)
-        await createProposal(content, endTime)
-        // await sleep(2000)
-        setIsLoading(false)
-        setFinished(true)
+        try {
+            setIsLoading(true)
+            await createProposal(content, endTime)
+            // await sleep(2000)
+            setIsLoading(false)
+            setFinished(true)
+        } catch (error) {
+            setIsLoading(false)
+        }
     }
 
     return (
