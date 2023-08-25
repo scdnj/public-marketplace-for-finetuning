@@ -18,11 +18,16 @@ const VoteProposal = ({ proposalId, action, proof, onClose }: VoteContent) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleVote = async () => {
-        setIsLoading(true)
-        await vote(proof, proposalId, action)
-        await voteProposal(action ? 1 : 2)
-        setIsLoading(false)
-        setProcess(true)
+        try {
+            setIsLoading(true)
+            await vote(proof, proposalId, action)
+            await voteProposal(proposalId+1, action ? 1 : 2)
+            setIsLoading(false)
+            setProcess(true)
+        } catch (error) {
+            setIsLoading(false)
+        }
+
     }
 
     return (
