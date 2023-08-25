@@ -12,9 +12,9 @@ interface ProposalType {
 }
 
 const proposal: ProposalType = { 
-  1: 'KT1ExMeV39XPUEyARJYwjUMfC1Lq1PLwo8bh', 
-  2: 'KT1KnNfPjgnn7jznstBZ7FXvwBEH5RwjLafK',
-  3: 'KT1S9iHKShcrkJLZMTeeEcqgKZ3gQQgmcKBg'
+  1: 'KT18g2xDwAnSTaAUf485EwcQuXrims95yHQi', 
+  2: 'KT1NNfjRMnsBWmFm9UypuLq9ztcUVQpuG9an',
+  3: 'KT1G1nxsTuVzjtuXNTpqYbcCvYoQxPJDS2us'
 }
 
 export const voteProposal = async (proposalNumber: number, vote: number) =>  {
@@ -34,6 +34,7 @@ export const voteProposal = async (proposalNumber: number, vote: number) =>  {
   })
   .then((hash) => {
     console.log(`Vote finished: https://better-call.dev/ghostnet/opg/${hash}`)
+    return hash
   })
   .catch((error) => {
     console.log(`Vote error: ${JSON.stringify(error, null, 2)}`)
