@@ -57,6 +57,7 @@ export const resetProposal = async (proposalNumber: number) =>  {
   })
   .then((hash) => {
     console.log(`Reset operation finished: https://better-call.dev/ghostnet/opg/${hash}`)
+    return hash
   })
   .catch((error) => {
     console.log(`Reset error: ${JSON.stringify(error, null, 2)}`)
