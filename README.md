@@ -3,10 +3,9 @@
 
 <p> An AI-Enhanced KYC Platform (PoC)</p>
 
-![logo](./apps/web/public/tobi.png)
+<img src="./apps/web/public/tobi.png" width="50%" height="50%"></img>
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE) [![BuildPass](https://img.shields.io/github/actions/workflow/status/hollow-leaf/tobi/ghpage.yml)](https://github.com/hollow-leaf/tobi/deployments)
-
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE) [![BuildPass](https://img.shields.io/github/actions/workflow/status/hollow-leaf/tobi/ghpage.yml)](https://github.com/hollow-leaf/tobi/deployments) [![Frontend deploy](https://github.com/hollow-leaf/tobi/actions/workflows/ghpage.yml/badge.svg?branch=main)](https://github.com/hollow-leaf/tobi/actions/workflows/ghpage.yml)
 </div>
 
 ### Demo Page
