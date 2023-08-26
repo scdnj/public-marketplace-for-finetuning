@@ -6,6 +6,7 @@ on:
       - main # The branch the action should deploy from.
     paths:
       - 'apps/web/**' # The folder the action should deploy.
+      - '.github/workflows/**' # The workflow folder the action should deploy.
 
 permissions:
   contents: read
@@ -19,6 +20,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
     steps:
       - name: Checkout 🛎️
