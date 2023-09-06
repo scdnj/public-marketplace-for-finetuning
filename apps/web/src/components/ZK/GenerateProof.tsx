@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatAddress, sleep } from 'helper'
 import { zkproof, getModelWeight } from '../../service/kamui/verify'
 import ProcessLoading from '../../components/Loading/ProcessLoading'
@@ -19,13 +19,15 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
     const [isLoading, setIsLoading] = useState(false);
     const [loadingText, setLoadingText] = useState('')
     const [loadingSecondaryText, setLoadingSecondaryText] = useState(null)
+    const [modelWeightList, setModelWeightList] = useState([])
+    const [modelWeightId, setModelWeightId] = useState(null)
     const ipfsKey = 'QmedkX5nTPfDZxF5epTXTA4pha61xX3uzVi31EgJdcQ7Jw'
 
     const handleProcess2GrayScale = async () => {
         return new Promise((resolve, reject) => {
             const canvas = document.getElementById('a') as HTMLCanvasElement;
             const context = canvas.getContext('2d');
-    
+
             var img = new Image();
             img.src = imgSrc
             img.onload = function () {
@@ -35,17 +37,17 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
                 const width = 50;
                 const height = 50;
                 const outputArray = [];
-    
+
                 for (let y = 0; y < height; y++) {
-                const row = [];
-                for (let x = 0; x < width; x++) {
-                    const index = y * width + x;
-                    row.push([input8Array[index]]);
-                }
+                    const row = [];
+                    for (let x = 0; x < width; x++) {
+                        const index = y * width + x;
+                        row.push([input8Array[index]]);
+                    }
                     outputArray.push(row);
                 }
                 resolve(outputArray)
-           }  
+            }
         })
     }
 
@@ -53,9 +55,9 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
         setIsLoading(true)
         const grayScaleBuffer = await handleProcess2GrayScale()
         setLoadingText(`Downloading model weight`)
-        setLoadingSecondaryText(ipfsKey)
-        const modelWeight = await getModelWeight(ipfsKey)
-        await sleep (2000)
+        setLoadingSecondaryText(modelWeightId)
+        const modelWeight = await getModelWeight(modelWeightId)
+        await sleep(2000)
         setLoadingSecondaryText(null)
         setLoadingText(`Generating Proof`)
         const result = await zkproof(grayScaleBuffer, modelWeight)
@@ -73,6 +75,14 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
             }, 1000)
         });
     };
+
+    const getModelWeightFromAr = async () => {
+        setModelWeightList([ipfsKey])
+    }
+
+    useEffect(() => {
+        getModelWeightFromAr()
+    }, [])
 
     return (
         <div className="flex flex-col items-center ">
@@ -102,20 +112,30 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
                             <div className="btn" onClick={onClose} >OK</div>
                         </div>
                         : <>
-                        {
-                            isLoading
-                            ? <div className='flex flex-col items-center space-y-3'>
-                                <span className='font-mono'>{loadingText}</span>
-                                { loadingSecondaryText ? <span className='font-mono'>{loadingSecondaryText}</span> : null}
-                                    <ProcessLoading />
-                                </div>
-                            : <div className="btn" onClick={genProof} >Generate</div>
-                        }
+                            {
+                                isLoading
+                                    ? <div className='flex flex-col items-center space-y-3'>
+                                        <span className='font-mono'>{loadingText}</span>
+                                        {loadingSecondaryText ? <span className='font-mono'>{loadingSecondaryText}</span> : null}
+                                        <ProcessLoading />
+                                    </div>
+                                    : <div className='flex flex-col items-center space-y-3'>
+                                        <select className="select select-bordered w-full max-w-xs" onChange={(e) => setModelWeightId(e.target.value)}>
+                                            <option disabled selected>Select Model</option>
+                                            {
+                                                modelWeightList.map((modelWeight) => {
+                                                    return <option value={modelWeight}>{modelWeight}</option>
+                                                })
+                                            }
+                                        </select>
+                                        <button className="btn" onClick={genProof} disabled={modelWeightId === null}>Generate</button>
+                                    </div>
+                            }
                         </>
                 }
             </div>
             <canvas id="a" width="50" height="50" style={{ display: 'none' }} ></canvas>
-        </div>
+        </div >
     );
 }
 
