@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { formatAddress, sleep } from 'helper'
+import { formatString, sleep } from 'helper'
 import { zkproof, getModelWeight } from '../../service/kamui/verify'
 import ProcessLoading from '../../components/Loading/ProcessLoading'
 
@@ -95,7 +95,7 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
                     proofToJSON
                         ? <div className='flex flex-col space-y-3 items-center'>
                             <div className='flex flex-row w-[350px] space-x-2 p-4 border-2 border-solid shadow-[0_3px_10px_rgb(0,0,0,0.2)] card'>
-                                <span className='text-white font-mono'>{formatAddress(JSON.stringify(proofToJSON))}</span>
+                                <span className='text-white font-mono'>{formatString(JSON.stringify(proofToJSON), 12)}</span>
                                 <label className='swap items-center'>
                                     <input type='checkbox' checked={isCopied} />
                                     <svg className="swap-on w-6 h-6" onClick={() => {
