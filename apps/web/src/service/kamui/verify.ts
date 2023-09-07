@@ -31,8 +31,10 @@ export async function generateProof(circuitInputs: any, filePathWASM: any, fileP
 }
 const hexToDecimal = (hex: string) => BigInt('0x' + hex).toString()
 
-export const getModelWeight = async (key: string) => {
-  const modelUrl = `https://gateway.lighthouse.storage/ipfs/${key}`
+export const getModelWeight = async (key: string, type: string) => {
+  const arBaseUrl = `https://arweave.net`
+  const filecoinsBaseUrl = `https://gateway.lighthouse.storage/ipfs`
+  const modelUrl = type === 'AR' ? `${arBaseUrl}/${key}` : `${filecoinsBaseUrl}/${key}`
   try {
     const response = await fetch(modelUrl);
 
@@ -51,7 +53,7 @@ export const getModelWeight = async (key: string) => {
 export async function zkproof(photo: any, modelWeight: any) {
   const filePathWASM: string = 'circuits.wasm'
   const filePathZKEY: string = 'circuits.zkey'
-  
+
   const circuitInputs = {
     in: photo,
     ...modelWeight

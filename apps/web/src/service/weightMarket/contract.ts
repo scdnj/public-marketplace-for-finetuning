@@ -1,6 +1,7 @@
 'use client'
 
 import { writeContract, prepareWriteContract, getNetwork, getAccount } from 'wagmi/actions'
+import { parseEther } from 'viem'
 import { marketAbi } from './abi'
 import { sepoliaClient, goerliClient, account } from '../kamui/client'
 import { cookies } from 'next/dist/client/components/headers'
@@ -23,6 +24,7 @@ export const buyWeight = async (id: number) => {
     abi: marketAbi,
     functionName: 'buyWeight',
     args: [id],
+    value: parseEther('0.001')
   })
   await writeContract(request)
 }
@@ -43,7 +45,7 @@ export const getTotalWeightList = async () => {
   const publicClient = publicClients[chain!.name]
   const totalCount = await getTotalWeightCount()
   const weightList = []
-  for(let i = 0; i < totalCount; i += 1) {
+  for (let i = 0; i < totalCount; i += 1) {
     const data = await publicClient.readContract({
       address: contractAddress[chain!.name],
       abi: marketAbi,

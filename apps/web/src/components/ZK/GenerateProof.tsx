@@ -10,19 +10,17 @@ export interface GenerateProofProps {
     handleCopyClick: any
     onClose: any
     setProof: any
+    userModels: any
 }
 
 
-const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateProofProps) => {
+const GenerateProof = ({ imgSrc, handleCopyClick, setProof, userModels, onClose }: GenerateProofProps) => {
     const [isCopied, setCopied] = useState(false);
     const [proofToJSON, setProofToJSON] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [loadingText, setLoadingText] = useState('')
     const [loadingSecondaryText, setLoadingSecondaryText] = useState(null)
-    const [modelWeightList, setModelWeightList] = useState([])
-    const [modelWeightId, setModelWeightId] = useState(null)
-    const ipfsKey = 'QmedkX5nTPfDZxF5epTXTA4pha61xX3uzVi31EgJdcQ7Jw'
-
+    const [selectedModel, setModel] = useState(null)
     const handleProcess2GrayScale = async () => {
         return new Promise((resolve, reject) => {
             const canvas = document.getElementById('a') as HTMLCanvasElement;
@@ -54,9 +52,9 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
     const genProof = async () => {
         setIsLoading(true)
         const grayScaleBuffer = await handleProcess2GrayScale()
-        setLoadingText(`Downloading model weight`)
-        setLoadingSecondaryText(modelWeightId)
-        const modelWeight = await getModelWeight(modelWeightId)
+        setLoadingText(`Downloading model weight from ${selectedModel.uploadType}`)
+        setLoadingSecondaryText(selectedModel.url)
+        const modelWeight = await getModelWeight(selectedModel.url, selectedModel.uploadType)
         await sleep(2000)
         setLoadingSecondaryText(null)
         setLoadingText(`Generating Proof`)
@@ -75,14 +73,6 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
             }, 1000)
         });
     };
-
-    const getModelWeightFromAr = async () => {
-        setModelWeightList([ipfsKey])
-    }
-
-    useEffect(() => {
-        getModelWeightFromAr()
-    }, [])
 
     return (
         <div className="flex flex-col items-center ">
@@ -120,15 +110,16 @@ const GenerateProof = ({ imgSrc, handleCopyClick, setProof, onClose }: GenerateP
                                         <ProcessLoading />
                                     </div>
                                     : <div className='flex flex-col items-center space-y-3'>
-                                        <select className="select select-bordered w-full max-w-xs" onChange={(e) => setModelWeightId(e.target.value)}>
+                                        <select className="select select-bordered w-full max-w-xs" onChange={(e) => setModel(JSON.parse(e.target.value))}>
                                             <option disabled selected>Select Model</option>
                                             {
-                                                modelWeightList.map((modelWeight) => {
-                                                    return <option value={modelWeight}>{modelWeight}</option>
+                                                userModels.map((modelWeight: any, index: number) => {
+                                                    const [name, url, uploadType] = modelWeight
+                                                    return <option key={index} value={`{"name":"${name}","url":"${url}","uploadType":"${uploadType}"}`}>{name}</option>
                                                 })
                                             }
                                         </select>
-                                        <button className="btn" onClick={genProof} disabled={modelWeightId === null}>Generate</button>
+                                        <button className="btn" onClick={genProof} disabled={selectedModel === null}>Generate</button>
                                     </div>
                             }
                         </>

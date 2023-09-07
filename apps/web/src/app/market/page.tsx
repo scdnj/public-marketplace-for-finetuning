@@ -56,22 +56,20 @@ export default function Market() {
                         ? <div className="mb-10 grid xl-[1320px] xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-items-center">
                             {models.map((model: any, index: number) => {
                                 const [name, url, uploadType, price] = model
-                                let status = "Open"
-                                if (proposalStatus === status || proposalStatus === "All" || proposalStatus === "init") {
-                                    return (
-                                        <ModelWeightCard
-                                            modelId={index}
-                                            modelName={name}
-                                            modelKey={url}
-                                            storageType={uploadType}
-                                            modelPrice={price}
-                                            isBuy={userModels.includes(url)}
-                                            setIsConfirmDialogOpen={setIsConfirmDialogOpen}
-                                            setModelWeightId={setModelWeightId}
-                                            setModelWeightName={setModelWeightName}
-                                        />
-                                    );
-                                }
+                                return (
+                                    <ModelWeightCard
+                                        key={index}
+                                        modelId={index}
+                                        modelName={name}
+                                        modelKey={url}
+                                        storageType={uploadType}
+                                        modelPrice={price}
+                                        isBuy={userModels.includes(url)}
+                                        setIsConfirmDialogOpen={setIsConfirmDialogOpen}
+                                        setModelWeightId={setModelWeightId}
+                                        setModelWeightName={setModelWeightName}
+                                    />
+                                );
                             })
                             }
                         </div>
@@ -89,12 +87,12 @@ export default function Market() {
                     }
                 </div>
                 <ProcessDialog
-                        isOpen={isConfirmDialogOpen}
-                        onClose={() => setIsConfirmDialogOpen(false)}
-                        title={selectedModelWeightName}
-                    >
-                        <BuyModelConfirm modelId={selectedModelWeightId} onClose={() => setIsConfirmDialogOpen(false)} />
-                    </ProcessDialog>
+                    isOpen={isConfirmDialogOpen}
+                    onClose={() => setIsConfirmDialogOpen(false)}
+                    title={selectedModelWeightName}
+                >
+                    <BuyModelConfirm modelId={selectedModelWeightId} onClose={() => setIsConfirmDialogOpen(false)} />
+                </ProcessDialog>
             </div>
 
         </div >
