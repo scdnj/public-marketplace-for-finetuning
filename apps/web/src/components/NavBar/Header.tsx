@@ -8,7 +8,7 @@ import Image from 'next/image'
 
 const Header: React.FC = () => {
   return (
-    <header className='bg-cat-crust p-4 flex items-center justify-between '>
+    <header className='bg-cat-crust p-2 flex items-center justify-between '>
       <div className='navbar bg-base-500'>
         <div className='navbar-start'>
           <Link href={'/home'}>
@@ -17,7 +17,7 @@ const Header: React.FC = () => {
               src='/tobi/tobi.png'
               width={500}
               height={500}
-              className='w-14 h-14'
+              className='w-16 h-16'
             />
           </Link>
           <ul className='menu menu-horizontal px-1 text-xl lg:flex'>
