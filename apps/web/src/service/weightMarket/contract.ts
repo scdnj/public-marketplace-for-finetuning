@@ -1,6 +1,6 @@
 'use client'
 
-import { writeContract, prepareWriteContract, getNetwork, getAccount } from 'wagmi/actions'
+import { writeContract, prepareWriteContract, getNetwork, waitForTransaction } from 'wagmi/actions'
 import { parseEther } from 'viem'
 import { marketAbi } from './abi'
 import { sepoliaClient, goerliClient, account } from '../kamui/client'
@@ -26,7 +26,10 @@ export const buyWeight = async (id: number) => {
     args: [id],
     value: parseEther('0.001')
   })
-  await writeContract(request)
+  const { hash } = await writeContract(request)
+  const data = await waitForTransaction({
+    hash
+  })
 }
 
 export const getTotalWeightCount = async () => {
