@@ -51,6 +51,7 @@ jobs:
           echo NEXT_PUBLIC_PRIVATE_KEY=${{secrets.NEXT_PUBLIC_PRIVATE_KEY}} >> ./apps/web/.env
           echo NEXT_PUBLIC_INFURA_API_KEY=${{secrets.NEXT_PUBLIC_INFURA_API_KEY}} >> ./apps/web/.env
           echo NEXT_PUBLIC_SEPOLIA_CONTRACT=${{secrets.NEXT_PUBLIC_SEPOLIA_CONTRACT}} >> ./apps/web/.env
+          echo NEXT_PUBLIC_SEPOLIA_WEIGHT_MARKET_CONTRACT=${{secrets.NEXT_PUBLIC_SEPOLIA_WEIGHT_MARKET_CONTRACT}} >> ./apps/web/.env
       
       - name: Build my App
         run: pnpm run build
