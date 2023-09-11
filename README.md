@@ -40,7 +40,7 @@ Simultaneously, we employ zero-knowledge proofs to safeguard user data while ach
 sequenceDiagram
     actor User
     participant Web
-    participant I as LightHouse IPFS
+    participant I as Arweave and Filecoin
     participant Z as Zero Knowledge Model
     participant S as Sepolia
     participant T as Tezos
@@ -128,6 +128,12 @@ pnpm run dev
 pnpm build
 ```
 
+7. Arweave Upload Model Service
+```sh
+# copy private key to packages
+touch packages/arweave-service/wallet.json
+docker-compose -f packages/arweave-service/docker-compose.yaml up -d --build ar_backend 
+```
 ### Contributors
 - Frontend + Voting Contract: [YeeeTai](https://github.com/YeeeTai)
 - ZKML Model Circuits + Wormhole Support + LightHouse Support: [kidneyweakx](https://github.com/kidneyweakx)
