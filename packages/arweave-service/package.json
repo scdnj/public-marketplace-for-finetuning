@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "ts-node --esm src/service/ar.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "ar:local": "arlocal",
+    "build": "docker build -f Dockerfile -t arbackend ."
   },
   "devDependencies": {
     "@types/cors": "^2.8.14",
@@ -12,12 +13,12 @@
     "arlocal": "^1.1.61",
     "dotenv": "^16.3.1",
     "ts-node": "^10.9.1",
-    "tsconfig": "workspace:*",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "arweavekit": "^1.4.9",
     "cors": "^2.8.5",
+    "ethers": "6.7.1",
     "express": "^4.18.2"
   }
 }

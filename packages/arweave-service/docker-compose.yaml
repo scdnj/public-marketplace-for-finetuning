@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+    ar_backend:
+        container_name: ar_backend
+        image: ar_backend
+        ports:
+            - '8080:8080'
+        restart: always
+        networks:
+            - ar_network
+        build:
+            context: ./
+            dockerfile: Dockerfile
+    caddy:
+        container_name: ar_caddy
+        image: caddy:latest
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./scripts/caddy_data:/data
+            - ./scripts/caddy_config:/config
+            - ./scripts/caddy_config/Caddyfile:/etc/caddy/Caddyfile
+        networks:
+            - ar_network
+            - public_access
+
+networks:
+    public_access:
+    ar_network:
+        name: ar_network
+        driver: bridge

@@ -1,48 +1,38 @@
-
+import fs from 'fs'
+import { ethers } from 'ethers'
 import { createTransaction, signTransaction, postTransaction } from 'arweavekit/transaction'
-import { createWallet, getBalance } from 'arweavekit/wallet'
+import { IAgeModel } from '../interface/model'
 
-const upload = async (data: any) => {
-  const wallet = await createWallet({
-    seedPhrase: true,
-    environment: 'local',
-  })
-
+export const upload: any = async (data: IAgeModel, key: any, net: 'local' | 'mainnet') => {
+  const modelData = JSON.stringify(data)
+  
   const transaction = await createTransaction({
-    key: wallet.key,
+    key: key,
     type: 'data',
-    environment: 'local',
-    data: data,
+    environment: net,
+    data: modelData,
   })
-  console.log(transaction)
-  // const signedTransaction = await signTransaction({
-  //   createdTransaction: transaction,
-  //   key: wallet.key,
-  //   environment: 'local',
-  // })
-
+  await signTransaction({
+    createdTransaction: transaction,
+    key: key,
+    environment: net,
+  })
   const response = await postTransaction({
     transaction: transaction,
-    environment: 'local',
-    key: wallet.key,
+    environment: net,
+    key: key,
   })
   return response
 }
 
-async function main() {
-
-  // const wallet = await createWallet({
-  //   seedPhrase: true,
-  //   environment: 'mainnet',
-  // })
-  const balance = await getBalance({
-    address: 'eO-5rv1YCRbPCXCI_cSAdMEbfVOgAgsiPmtP_GgMss8',
-    environment: 'mainnet',
-  })
-  console.log(balance)
-  // const data = Buffer.from('Hello Arweave!')
-  // const res = await upload(data)
-  // console.log(res)
+export const list: any = async (priv: string, name: string, url: string) => {
+  const provider = new ethers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/demo')
+  const wallet = new ethers.Wallet(priv, provider)
+  const abi = JSON.parse(fs.readFileSync('./src/resource/abi.json').toString())
+  const contract = new ethers.Contract('0x08A7a3bF86781E5059272b6079F735cf39ffE4B2', 
+    abi.result,
+    wallet
+  )
+  const tx = await contract.uploadWeight(name, url, 'AR', 1000000000000000)
+  return tx
 }
-
-main().catch(console.error)
