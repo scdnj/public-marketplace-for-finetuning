@@ -28,7 +28,7 @@ export default function RootLayout({
           <ClientOnly>
             <Header />
           </ClientOnly>
-          <div className="grow bg-cat-base overflow-y-auto" style={{ height: 'calc(100vh - 108px)' }}>{children}</div>
+          <main className="grow bg-cat-base overflow-y-auto" style={{ height: 'calc(100vh - 108px)' }}>{children}</main>
         </WagmiProvider>
       </body>
     </html>

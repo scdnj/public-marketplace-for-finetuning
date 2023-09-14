@@ -55,7 +55,7 @@ const ProposalCard = (props: ProposalCard) => {
 
     return (
         <div
-            className=" card text-white bg-base-100 border-white border-solid border-2 w-[300px] p-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] mt-3 cursor-pointer "
+            className=" card text-white bg-base-100 border-white border-solid border-2 w-[300px] p-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] cursor-pointer "
         >
             <div className="card-body">
                 <div className="flex items-center mb-2">

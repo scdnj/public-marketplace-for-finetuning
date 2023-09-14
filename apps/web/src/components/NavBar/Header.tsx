@@ -11,7 +11,7 @@ const Header: React.FC = () => {
     <header className='bg-cat-crust p-2 flex items-center justify-between '>
       <div className='navbar bg-base-500'>
         <div className='navbar-start'>
-          <Link href={'/home'}>
+          <Link href={'/'}>
             <Image
               alt='Tobi'
               src='/tobi/tobi.png'
@@ -21,7 +21,7 @@ const Header: React.FC = () => {
             />
           </Link>
           <ul className='menu menu-horizontal px-1 text-xl lg:flex'>
-            <li><Link href={'/home'}>Home</Link></li>
+            <li><Link href={'/'}>Home</Link></li>
             <li><Link href={'/vote'}>Vote</Link></li>
             <li><Link href={'/market'}>Market</Link></li>
           </ul>

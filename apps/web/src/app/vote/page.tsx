@@ -136,7 +136,7 @@ export default function Vote() {
                                         : null
                                     }
                                 </div>
-                                <div className="mb-10 grid xl-[1320px] xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-items-center">
+                                <div className="mb-10 grid xl-[1320px] xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 justify-items-center m-2">
                                     {proposals.map((proposal: any, index: number) => {
                                         const [name, creator, acceptCount, denyCount, endTime] = proposal
                                         let status = "Open"

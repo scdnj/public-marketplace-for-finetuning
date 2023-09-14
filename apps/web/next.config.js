@@ -6,7 +6,7 @@ module.exports = {
     unoptimized: true
   },
   basePath: '/tobi',
-  assetPrefix: './',
+  assetPrefix: '/tobi',
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;
