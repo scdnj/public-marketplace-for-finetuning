@@ -29,7 +29,7 @@ const ModelWeightCard = (props: ModelWeightCardProps) => {
 
     return (
         <div
-            className=" card bg-gradient-to-r from-[#585a9d] to-[#919dc9] w-[300px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] mt-3 "
+            className=" card bg-gradient-to-r from-[#585a9d] to-[#919dc9] w-[300px] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
         >
             <div className="card-body gap-4">
                 <div className="flex flex-row items-center mb-2 space-x-3">
