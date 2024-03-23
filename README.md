@@ -134,7 +134,3 @@ pnpm build
 touch packages/arweave-service/wallet.json
 docker-compose -f packages/arweave-service/docker-compose.yaml up -d --build ar_backend 
 ```
-### Contributors
-- Frontend + Voting Contract: [YeeeTai](https://github.com/YeeeTai)
-- ZKML Model Circuits + Wormhole Support + LightHouse Support: [kidneyweakx](https://github.com/kidneyweakx)
-- Tezos Contract: [Pianochicken](https://github.com/Pianochicken)
